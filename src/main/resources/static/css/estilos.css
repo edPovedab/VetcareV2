@@ -1,0 +1,83 @@
+/* Estilo para el navbar */
+.navbar-custom {
+    background-color: #2f4073; /* Color de fondo del navbar */
+    height: 100px; /* Altura del navbar */
+}
+
+/* styles.css */
+
+/* Estilo para el div con la clase 'custom-background' */
+.custom-background {
+    background-image: url('path_to_your_image.jpg'); /* Ruta de la imagen */
+    background-size: cover;  /* Hace que la imagen cubra todo el fondo */
+    background-position: center; /* Centra la imagen en el contenedor */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    height: 100%; /* Asegura que el fondo cubra toda la altura disponible */
+}
+
+.imagen {
+    width: 60%;  /* Ajusta el tamaño de las imágenes */
+    margin-right: 10px;  /* Espacio entre las imágenes */
+}
+
+/* Estilo para el texto que va sobre la imagen */
+.texto {
+    position: absolute;
+    top: 50%;  /* Centra el texto verticalmente */
+    right: 20px;  /* Coloca el texto 20px desde el borde derecho */
+    transform: translateY(-50%);  /* Ajusta el texto para centrarlo perfectamente */
+    color: white;  /* Color del texto (blanco) */
+    font-weight: bold;  /* Letra gruesa */
+    font-size: 2em;  /* Tamaño del texto */
+}
+
+.parent {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.div1 {
+    grid-row: span 4 / span 4;
+}
+
+.div2 {
+    grid-row: span 4 / span 4;
+}
+
+.columna {
+    margin-bottom: 30px; /* Espacio debajo de cada columna */
+}
+
+/* Personalización para la imagen de la columna 1 */
+.img-columna1 {
+    width: 50%;  /* Ajusta el tamaño de la imagen en la columna 1 al 80% */
+    height: 100px; /* Establece una altura fija */
+}
+
+/* Personalización para la imagen de la columna 2 */
+.img-columna2 {
+    width: 100%;  /* Mantiene la imagen al 100% del tamaño de la columna */
+    height: 250px; /* Establece una altura fija */
+}
+
+/* Personalización para la imagen de la columna 3 */
+.img-columna3 {
+    width: 90%;  /* Ajusta la imagen al 90% del tamaño de la columna */
+    height: 350px; /* Establece una altura fija */
+}
+
+/* Estilo para los títulos */
+.titulo {
+    font-weight: bold;
+    font-size: 1.5em; /* Tamaño de fuente ajustable */
+    margin-top: 15px;
+}
+
+/* Estilo para los párrafos */
+.parrafo {
+    color: #B0B0B0; /* Gris claro */
+    font-size: 1em; /* Tamaño de fuente ajustable */
+    margin-top: 10px;
+}

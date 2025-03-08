@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout/plantilla :: head"></head>
+    <body>
+        <header th:replace="layout/plantilla :: header"></header>
+
+        <div style="margin-top: 100px;">
+            <img src="images/gato.png" alt="Imagen" class="img-fluid" style="width: 40%; height: 600px;">
+
+            <div>
+                <h1>Contenido de la sección</h1>
+            </div>
+
+            <div class="container">
+                <div class="row justify-content-end">
+                    <div class="col-7" style="text-align: center; margin-top: -550px;">
+                        <h1 style="font-weight: bold; font-size: 26px;">Formulario de contacto</h1>
+                    </div>
+                </div>            
+                <div class="row justify-content-end" style="margin-left: 5cm; margin-right: -0.5cm; margin-top: -12cm;">
+                    <div class="col-8">
+                        <div class="mb-4">
+                            <input type="text" class="form-control" id="nombre" placeholder="Nombre">
+                        </div>
+                        <div class="mb-4">
+                            <input type="email" class="form-control" id="correo" placeholder="Correo Electrónico">
+                        </div>
+                        <div class="mb-4">
+                            <input type="tel" class="form-control" id="telefono" placeholder="Teléfono">
+                        </div>
+                        <div class="mb-4">
+                            <textarea class="form-control" id="mensaje" placeholder="Mensaje" rows="3"></textarea><br><br>
+
+                            <button type="submit" class="btn" style="background-color: #bf8d7a; color: white; width: 200px; margin-left: 6cm; margin-right: 0;">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        <footer th:replace="layout/plantilla :: footer"></footer>
+    </body>
+</html>

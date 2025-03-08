@@ -1,0 +1,128 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout/plantilla :: head">
+        <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+        <style>
+            /* Estilos personalizados */
+            .texto {
+                position: absolute;
+                top: 20%;
+                right: 100px;
+                transform: translateY(-50%);
+                color: white;
+                font-weight: bold;
+                font-size: 2em;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            }
+
+            .btn-agendar {
+                position: absolute;
+                right: 445px;
+                top: 30%;
+                transform: translateY(-50%);
+                background-color: #7193d9;
+                padding: 12px 25px;
+                color: white;
+                font-weight: bold;
+                text-decoration: none;
+                border-radius: 5px;
+                border: none;
+                font-size: 1.1em;
+                transition: background-color 0.3s, transform 0.3s;
+            }
+
+            .btn-agendar:hover {
+                background-color: #5a7bbd;
+                transform: scale(1.05);
+            }
+
+            .col-md-6 {
+                padding: 20px;
+                background-color: #f4f4f4;
+                border-radius: 8px;
+                margin-bottom: 30px; /* Espacio entre las columnas */
+            }
+
+            img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 8px;
+                margin-top: 10px; /* Espacio entre el texto y la imagen */
+            }
+        </style>
+    </head>
+    <body>
+        <header th:replace="layout/plantilla :: header"></header>
+
+        <div style="margin-top: 0px;">
+            <img src="images/dog.png" alt="inicio" style="height: 400px; width: 100%;">
+            <div class="texto">Salud animal con calidad y amor.</div>
+            <button class="btn-agendar" onclick="window.location.href='/cita'">Agende su cita</button>
+
+            <div class="container" style="margin-top: 50px;">
+                <h2 style="font-weight: bold; text-align: left; font-size: 26px; margin-bottom: 40px;">Experiencias de nuestros clientes</h2>
+                
+                <div class="accordion" id="experienciasAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingAthena">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAthena" aria-expanded="true" aria-controls="collapseAthena">
+                                Athena
+                            </button>
+                        </h2>
+                        <div id="collapseAthena" class="accordion-collapse collapse show" aria-labelledby="headingAthena" data-bs-parent="#experienciasAccordion">
+                            <div class="accordion-body">
+                                <p>Se encontraba un hombre paseando a su perro cuando vio a una perrita intentando salir de un hoyo. Esa perrita era Athena quien había sido lanzada al hoyo lleno de tierra y piedras. Tras su rescate fue llevada a la clínica animal donde recibió todos los cuidados necesarios. Athena se encontraba deshidratada y en estado de shock. Su dueño fue llevado a prisión por crueldad animal y se enfrenta a recibir una condena de aproximadamente 2 años. En la actualidad Athena ya se encuentra en un nuevo hogar con una familia que la quiere de verdad.</p>
+                                <img src="images/Athena.jpg" alt="Athena"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingLoba">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLoba" aria-expanded="false" aria-controls="collapseLoba">
+                                Loba
+                            </button>
+                        </h2>
+                        <div id="collapseLoba" class="accordion-collapse collapse" aria-labelledby="headingLoba" data-bs-parent="#experienciasAccordion">
+                            <div class="accordion-body">
+                                <p> La encontraron en un estado muy crítico, realmente era muy difícil pensar que podía salvarse, padecía de sarna, desnutrición extrema entre otras infecciones. Pero con ayuda de buenas personas y las ganas de vivir de esta hermosa perrita pudo vencer a las de su recuperación. Fue adoptada por una familia y está feliz y corriendo por el jardín con otros perros.</p>
+                                <img src="images/Loba.jpg" alt="Loba"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingPatrick">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePatrick" aria-expanded="false" aria-controls="collapsePatrick">
+                                Patrick
+                            </button>
+                        </h2>
+                        <div id="collapsePatrick" class="accordion-collapse collapse" aria-labelledby="headingPatrick" data-bs-parent="#experienciasAccordion">
+                            <div class="accordion-body">
+                                <p>Se encontraron a este perro en la calle y lo llevaron a un veterinario de New Jersey. Estaba literalmente en los huesos y estaba claro que era cuestión de tiempo para que muriera. Pero gracias a los cuidados del equipo de veterinarios ocurrió esta transformación alucinante. Solo mira. Se lo encontraron envuelto en una bolsa de basura dentro de un contenedor. En minutos habría sido aplastado por la compactadora de basura.</p>
+                                <img src="images/patrick.png" alt="Patrick"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingMax">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMax" aria-expanded="false" aria-controls="collapseMax">
+                                Max
+                            </button>
+                        </h2>
+                        <div id="collapseMax" class="accordion-collapse collapse" aria-labelledby="headingMax" data-bs-parent="#experienciasAccordion">
+                            <div class="accordion-body">
+                                <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-bottom: 40px;"></div>
+
+        <footer th:replace="layout/plantilla :: footer"></footer>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    </body>
+</html>

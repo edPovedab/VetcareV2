@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Contacto</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <link href="../static/css/estilos.css" rel="stylesheet" type="text/css"/>
+
+        <style>
+            body {
+                background-color: #CEE8F2; /* Color de fondo */
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark;" style="background-color: #2f4073; height: 100px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000;" aria-label="Tenth navbar example">
+            <div class="container-fluid">
+
+
+                <a class="navbar-brand" href="index.html">
+                    <img src="images/logo.png" alt="Logo" style="height: 100px; width: auto; ">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample08" aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample08">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle"  href="#" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 50px; color: white;">Inicio</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="login.html">Iniciar Sesión como usuario</a></li>
+                                <li><a class="dropdown-item" href="#">Iniciar Sesión como Aministrador</a></li>                                
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="negocio.html" style="margin-right: 50px;" >Acerca de nosotros</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle"  href="#" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 50px; color: white;">Servicios</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="solicitud de citas.html">Agendar una cita</a></li>
+                                <li><a class="dropdown-item" href="#">Productos</a></li>
+                                <li><a class="dropdown-item" href="#">Asesorias y consultas</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="contacto.html">Contáctenos</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div style="margin-top: 100px;">
+            <img src="images/gato.png" alt="Imagen" class="img-fluid" style="width: 40%; height: 600px; ">
+
+            <div class="container">
+
+                <div class="row justify-content-end">
+                    <div class="col-7" style="text-align: center; margin-top: -550px;">
+                        <h1 style="font-weight: bold; font-size: 26px;">Formulario de contacto</h1>
+                    </div>
+                </div>            
+                <div class="row justify-content-end" style="margin-left: 5cm; margin-right: -0.5cm; margin-top: -12cm;">
+                    <div class="col-8">
+                        <!-- Código original con margen agregado -->
+                        <div class="mb-4">
+                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Nombre">
+                        </div>
+                        <div class="mb-4">
+                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Correo Electrónico">
+                        </div>
+                        <div class="mb-4">
+                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Teléfono">
+                        </div>
+                        <div class="mb-4">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Mensaje" rows="3"></textarea><br><br>
+
+                            <button type="submit" class="btn" style="background-color: #bf8d7a; color: white; width: 200px; margin-left: 6cm; margin-right: 0;">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer de lado a lado -->
+            <footer style="background-color: #2f4073; color: white; padding: 30px 0; width: 100%; position: relative;">
+                <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+                    <!-- Texto a la izquierda -->
+                    <p style="font-weight: bold; margin-left: -10px; font-size: 16px;">©VetCare+ Company, 2025</p>
+
+                    <!-- Texto centrado -->
+                    <p id="ubicacion" style="font-size: 15px; text-align: justify; line-height: 1.5; width: 40%; margin: 0 auto;  margin-left: 200px;">
+                        <strong>Ubicación:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam"</p>
+                    <!-- Texto a la derecha -->
+                    <p id="ubicacion" style="font-size: 15px; text-align: justify; line-height: 1.5; width: 10%; margin: 0 auto;  margin-left: 250px;">
+                        <strong>Teléfono:</strong> 5555-5555 / 2600-5555</p>             
+                </div>
+            </footer>
+    </body>
+</html>

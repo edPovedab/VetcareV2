@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout/plantilla :: head"></head>
+    
+    <body>
+        <header th:replace="layout/plantilla :: header"></header>
+
+        <div style="margin-top: 100px;" class="container">
+            <h1 style="text-align: center; font-weight: bold;">Mis citas Programadas</h1>
+            
+            <table class="table table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th>Id Cita</th>
+                        <th>Id Mascota</th>
+                        <th>Fecha y Hora</th>
+                        <th>Servicio</th>
+                        <th>Descripcion</th>
+                       
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="cita : ${citas}">
+                        <td th:text="${cita.id_cita}"></td>
+                        <td th:text="${cita.id_mascota}"></td>
+                        <td th:text="${cita.fecha_cita}"></td>
+                        <td th:text="${cita.servicio}"></td>
+                        <td th:text="${cita.notas}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <footer style="background-color: #2f4073; color: white; padding: 30px 0; width: 100%; position: relative;">
+            <div class="container">
+                <p style="font-weight: bold; text-align: left; margin-left: 20px;">©VetCare+ Company, 2025</p>
+            </div>
+        </footer>
+    </body>
+</html>
+

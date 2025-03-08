@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout/plantilla :: head"></head>
+    <body>
+      <header th:replace="layout/plantilla :: header"></header>
+
+        <div style="margin-top: 100px;">
+            <img src="images/vet.png" alt="Imagen" class="img-fluid" style="width: 50%; height: 600px;">
+
+
+            <!-- Contenedor principal con margen superior -->
+            <div class="container">
+
+                <div class="row justify-content-end">
+                    <div class="col-7" style="text-align: center; margin-top: -550px; margin-right: -90px;">
+                        <h1 style="font-weight: bold; font-size: 26px;">Inicie Sesión</h1>
+                    </div>
+                </div>
+
+                <div class="row justify-content-end" style="margin-left: 3cm; margin-right: -1cm; margin-top: -12cm;">
+
+                    <!-- Columna de la derecha con el formulario de acceso -->
+                    <div class="col-md-6">
+                        <form>
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">Correo Electrónico</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <div id="emailHelp" class="form-text">Nunca compartiremos tu dirección de correo con nadie más.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" id="exampleInputPassword1">
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                <label class="form-check-label" for="exampleCheck1">Mantén la sesión iniciada</label>
+                            </div><br>
+                            <button type="submit" class="btn" style="background-color: #bf8d7a; color: white; width: 200px;">Ingresar</button>
+                        </form>
+                    </div>
+                </div>   
+            </div>
+        </div>
+
+
+        <!-- Footer de lado a lado -->
+        <footer style="background-color: #2f4073; color: white; padding: 30px 0; width: 100%; position: relative;">
+            <div class="container">
+                <p style="font-weight: bold; text-align: left; margin-left: 20px;">©VetCare+ Company, 2025</p>
+            </div>
+        </footer>
+    </body>
+
+</html>

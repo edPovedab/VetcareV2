@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="layout/plantilla :: head"></head>
+    
+    <body>
+      <header th:replace="layout/plantilla :: header"></header>
+
+        <div style="margin-top: 100px;">
+            <img src="images/vete.png" alt="inicio" style="height: 500px; width: 100%;">
+            <div class="texto" style="
+                 position: absolute;
+                 top: 30%;
+                 right: 140px;
+                 transform: translateY(-50%);
+                 color: #2f4073;
+                 font-weight: bold;
+                 font-size: 2em;
+                 border-bottom: 3px solid #bf8d7a;
+                 ">Asesorías Veterinarias de Calidad.</div>
+
+            <div style="margin-top: 50px;">
+                <!-- Contenedor principal -->
+                <div class="container">
+                    <div class="row g-5">     
+                        <!-- Columna 1 -->
+                        <div class="col-md-4 columna">
+                            <img src="images/mision.png" alt="Imagen 1" class="img-columna1" style="width: 30%; height: 80px; position: relative; left: 136px;">
+                            <div class="titulo" style='font-weight: bold;font-size: 1.5em; margin-top: 20px; text-align:center'>Misión</div><br>
+                            <p class="parrafo" style="text-align: justify; color: gray">"Brindar atención veterinaria de alta calidad y asesoría a nuestros clientes para asegurar el bienestar de sus mascotas."</p>
+                        </div>
+
+                        <!-- Columna 2 -->
+                        <div class="col-md-4 columna">
+                            <img src="images/vision.png" alt="Imagen 2" class="img-columna2" style="width: 25%; height: 80px; position: relative; left: 136px;">
+                            <div class="titulo" style='font-weight: bold;font-size: 1.5em; margin-top: 20px; text-align:center'>Visión</div><br>
+                            <p class="parrafo" style="text-align: justify; color: gray">"Ser la clínica veterinaria de referencia en la comunidad, reconocida por su compromiso con la salud y el bienestar animal."</p>
+                        </div>
+
+                        <!-- Columna 3 -->
+                        <div class="col-md-4 columna">
+                            <img src="images/empleados.png" alt="Imagen 3" class="img-columna3" style="width: 30%; height: 80px; position: relative; left: 136px;">
+                            <div class="titulo" style='font-weight: bold;font-size: 1.5em; margin-top: 20px; text-align:center'>Asesorías y Servicios</div><br>
+                            <p class="parrafo" style="text-align: justify; color: gray">"Ofrecemos asesorías personalizadas en salud animal, nutrición y cuidados preventivos para asegurar la mejor calidad de vida para tus mascotas."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 100px;">
+                    <!-- Footer de lado a lado -->
+                    <footer style="background-color: #2f4073; color: white; padding: 30px 0; width: 100%; position: relative;">
+                        <div class="container">
+                            <p style="font-weight: bold; text-align: left; margin-left: 20px;">©VetCare+ Company, 2025</p>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
