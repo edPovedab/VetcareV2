@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
     <head th:fragment="head">
@@ -25,7 +26,7 @@
                                 <a class="nav-link" th:href="@{/}">Inicio</a>
                             </li>
                             <li class="nav-item px-2">
-                                <a class="nav-link" th:href="@{/cita}">Cita</a>
+                                <a class="nav-link" th:href="@{/redirigir_solicitud_citas}">Cita</a> <!-- Cambiado a la ruta correcta -->
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" 
@@ -62,19 +63,33 @@
             </nav>
         </header>
 
+        <!-- Contenido principal -->
+        <div class="container mt-4">
+            <h1>Bienvenido a VetCare+</h1>
+            <p>Su solución para el cuidado de mascotas.</p>
+            <!-- Aquí puedes agregar más contenido según sea necesario -->
+        </div>
+
         <!-- Footer -->
         <footer style="background-color: #2f4073; color: white; padding: 30px 0; width: 100%; position: relative;">
-            <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-                <!-- Texto a la izquierda -->
-                <p style="font-weight: bold; margin-left: -10px; font-size: 16px;">©VetCare+ Company, 2025</p>
-
-                <!-- Texto centrado -->
-                <p id="ubicacion" style="font-size: 15px; text-align: justify; line-height: 1.5; width: 40%; margin: 0 auto; margin-left: 200px;">
-                    <strong>Ubicación:</strong> Ruta 32 hacia Limón y luego seguir por la Ruta 36 hacia el sur, pasando por Cahuita
-                </p>
-                <!-- Texto a la derecha -->
-                <p id="ubicacion" style="font-size: 15px; text-align: justify; line-height: 1.5; width: 10%; margin: 0 auto; margin-left: 250px;">
-                    <strong>Teléfono:</strong> 5555-555 5 / 2600-5555</p>             
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <p style="font-weight: bold; font-size: 16px;">©VetCare+ Company, 2025</p>
+                        <p class="mb-0 small">Cuidando a tus mascotas con el mejor servicio veterinario</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <p id="ubicacion" style="font-size: 15px; text-align: center; line-height: 1.5;">
+                            <strong>Ubicación:</strong> Ruta 32 hacia Limón y luego seguir por la Ruta 36 hacia el sur, pasando por Cahuita
+                        </p>
+                    </div>
+                    <div class="col-lg-4 text-lg-end">
+                        <p id="telefono" style="font-size: 15px; line-height: 1.5; margin-bottom: 5px;">
+                            <strong>Teléfono:</strong> 5555-555 5 / 2600-5555
+                        </p>
+                        <p class="mb-0 small">Diseñado con <i class="fas fa-heart" style="color: #bf8d7a;"></i> para amantes de las mascotas</p>
+                    </div>
+                </div>
             </div>
         </footer>
     </body>

@@ -81,3 +81,156 @@
     font-size: 1em; /* Tamaño de fuente ajustable */
     margin-top: 10px;
 }
+
+/* Estilos para el formulario de citas - Agregar a tu archivo estilos.css */
+
+/* Variables de colores - Puedes ajustarlas según tu diseño general */
+.cita-vars {
+    --cita-primary-color: #2f4073;
+    --cita-secondary-color: #bf8d7a;
+    --cita-light-color: #f8f9fa;
+    --cita-dark-color: #343a40;
+}
+
+/* Contenedor principal del formulario */
+.cita-container {
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 80px;
+}
+
+/* Tarjeta de formulario */
+.cita-card {
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    background-color: white;
+    transition: transform 0.3s ease;
+}
+
+.cita-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Campos de formulario */
+.cita-input {
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.cita-input:focus {
+    box-shadow: 0 0 0 3px rgba(191, 141, 122, 0.25);
+    border-color: #bf8d7a;
+}
+
+/* Botón principal */
+.cita-btn {
+    border-radius: 8px;
+    padding: 12px 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background-color: #bf8d7a;
+    color: white;
+}
+
+.cita-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(191, 141, 122, 0.4);
+}
+
+/* Etiquetas de formulario */
+.cita-label {
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #2f4073;
+}
+
+/* Radio buttons estilizados */
+.cita-radio-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.cita-radio-btn {
+    flex: 1;
+    position: relative;
+}
+
+.cita-radio-btn input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+}
+
+.cita-radio-btn label {
+    display: block;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    margin: 0;
+}
+
+.cita-radio-btn input[type="radio"]:checked + label {
+    background-color: #bf8d7a;
+    color: white;
+    border-color: #bf8d7a;
+}
+
+/* Cabecera del formulario */
+.cita-header {
+    background: linear-gradient(135deg, #2f4073 0%, #3a5795 100%);
+    padding: 25px;
+    border-radius: 15px 15px 0 0;
+    margin-bottom: 30px;
+}
+
+.cita-header h1 {
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+.cita-header p {
+    color: white;
+    margin-bottom: 0;
+}
+
+/* Contenedor de imagen */
+.cita-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+}
+
+.cita-image img {
+    transition: transform 0.5s ease;
+}
+
+.cita-image:hover img {
+    transform: scale(1.05);
+}
+
+/* Adaptación a móviles */
+@media (max-width: 992px) {
+    .cita-form-container {
+        margin-top: 20px;
+    }
+}
+
+/* Alerta de éxito */
+.cita-alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}

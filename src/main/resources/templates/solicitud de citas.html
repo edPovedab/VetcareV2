@@ -1,78 +1,156 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="layout/plantilla :: head"></head>
+    <head th:replace="layout/plantilla :: head">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+            <link th:href="@{/css/estilos.css}" rel="stylesheet" type="text/css"/>
+    </head>
 
     <body>
         <header th:replace="layout/plantilla :: header"></header>
 
-        <div style="margin-top: 100px;">
-            <img src="images/perrovet.png" alt="Imagen" class="img-fluid" style="width: 40%; height: 600px; ">
-
-            <div class="container">
-                <div class="row justify-content-end">
-                    <div class="col-7" style="text-align: center; margin-top: -550px;">
-                        <h1 style="font-weight: bold; font-size: 26px;">Solicitud de citas</h1>
+        <div class="container py-5 cita-container">
+            <div class="row">
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    <div class="cita-image h-100 d-flex align-items-center justify-content-center">
+                        <img th:src="@{/images/perrovet.png}" alt="Imagen" class="img-fluid" style="max-height: 550px; object-fit: cover;">
                     </div>
                 </div>
 
-                <form th:action="@{/solicitar}" method="post">
-                    <div class="row justify-content-end" style="margin-left: 7cm; margin-right: -0.5cm; margin-top: -12cm;">
-                        <div class="col-8">
-                            <div class="row">
-                                <div class="col">
-                                    <input type="text" name="tipoAnimal" class="form-control" placeholder="Tipo de Animal" required>
-                                </div>
-                                <div class="col">
-                                    <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
-                                </div>
-                            </div>
+                <div class="col-lg-7 cita-form-container">
+                    <div class="cita-card">
+                        <div class="cita-header text-center">
+                            <h1>Solicitud de Citas</h1>
+                            <p>Programa una visita para tu mascota con nuestros especialistas</p>
+                        </div>
 
-                            <div class="row justify-content-end" style="margin-left: -0.2cm; margin-right: -0.5cm; margin-top: 1.3cm;">
-                                <label for="fechaHora">Fecha y hora:</label>
-                                <input type="datetime-local" id="fechaHora" name="fechaHora" required>
+                        <!-- Mensaje de error -->
+                        <div th:if="${error}" class="alert alert-danger text-center">
+                            <span th:text="${error}"></span>
+                        </div>
 
-                                <div class="row justify-content-end" style="margin-left: 0cm; margin-right: -10cm; margin-top: -0.7cm;">
-                                    <label for="sexo">Sexo:</label>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="sexo" value="Macho" required>
-                                        <label class="form-check-label">Macho</label>
+                        <div class="card-body p-4">
+                            
+                            <form th:action="@{/citas/solicitar}" method="post"> 
+                                <div class="row mb-4">
+                                    <div class="col-md-12">
+                                        <label for="mascotaSelect" class="cita-label">Seleccione una mascota</label>
+                                        <select id="mascotaSelect" name="idMascota" class="form-control cita-input">
+                                            <option value="0">-- Registrar nueva mascota --</option>
+                                            <option th:each="mascota : ${mascotas}" 
+                                                    th:value="${mascota.idMascota}" 
+                                                    th:text="${mascota.nombreMascota + ' (' + mascota.especie + ')'}">
+                                            </option>
+                                        </select>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="sexo" value="Hembra" required>
-                                        <label class="form-check-label">Hembra</label>
+                                    <div class="form-group">
+                                        <label for="idPropietario">Propietario:</label>
+                                        <select class="form-control" id="idPropietario" name="idPropietario">
+                                            <option value="">Seleccione un propietario</option>
+                                            
+<!--                                            <th:block th:each="usuario : ${usuarios}">
+                                                <option th:value="${usuario.idUsuario}" th:text="${usuario.nombre}"></option>
+                                            </th:block>-->
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div id="nuevaMascotaInfo" style="display: none;">
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <label for="tipoAnimal" class="cita-label">Tipo de Animal</label>
+                                            <input type="text" id="tipoAnimal" name="tipoAnimal" class="form-control cita-input" placeholder="Ej: Perro, Gato, Conejo...">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="nombre" class="cita-label">Nombre de la Mascota</label>
+                                            <input type="text" id="nombre" name="nombre" class="form-control cita-input" placeholder="Nombre de tu mascota">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <label class="cita-label">Sexo de la Mascota</label>
+                                            <div class="cita-radio-group">
+                                                <div class="cita-radio-btn">
+                                                    <input type="radio" id="sexoMacho" name="sexo" value="Macho">
+                                                        <label for="sexoMacho">Macho</label>
+                                                </div>
+                                                <div class="cita-radio-btn">
+                                                    <input type="radio" id="sexoHembra" name="sexo" value="Hembra">
+                                                        <label for="sexoHembra">Hembra</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <label for="fechaHora" class="cita-label">Fecha y Hora Preferida</label>
+                                        <input type="datetime-local" id="fechaHora" name="fechaHora" class="form-control cita-input" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="telefono" class="cita-label">Teléfono de Contacto</label>
+                                        <input type="tel" id="telefono" name="telefono" class="form-control cita-input" placeholder="Ej: 123-456-7890" required>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4">
+                                    <div class="col-md-12">
+                                        <label for="motivo" class="cita-label">Motivo de la Consulta</label>
+                                        <textarea id="motivo" name="motivo" class="form-control cita-input" placeholder="Describe brevemente el motivo de tu visita" rows="3" required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="btn cita-btn" style="width: 220px;">
+                                        <i class="fas fa-calendar-check me-2"></i> Reservar Cita
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div class="text-center mt-4" th:if="${success}">
+                                <div class="alert alert-success" role="alert">
+                                    ¡Tu cita ha sido programada con éxito!
+                                </div>
+                                <a th:href="@{/citas/listar}" class="btn btn-info">
+                                    <i class="fas fa-calendar me-2"></i> Ver Citas Programadas
+                                </a>
                             </div>
                         </div>
                     </div>
-
-                    <div class="row justify-content-end" style="margin-left: 16.3cm; margin-right: 0; margin-top: 0.5cm;">
-                        <div class="mb-4">
-                            <input type="tel" name="telefono" class="form-control" placeholder="Teléfono" required>
-                        </div>
-                        <div class="mb-4">
-                            <textarea name="motivo" class="form-control" placeholder="Motivo de la cita" rows="3" required></textarea><br><br>
-                        </div>
-
-                        <button type="submit" class="btn" style="background-color: #bf8d7a; color: white; width: 200px; margin-left: 6cm; margin-right: 0;">
-                            Enviar
-                        </button>
-                    </div>
-                </form>
-
-                <div style="text-align: center; margin-top: 20px;">
-                    <a th:if="${param.success}" href="/citas_programadas" class="btn btn-info">Ver Citas Programadas</a>
                 </div>
             </div>
         </div>
 
-        <footer style="background-color: #2f4073; color: white; padding: 30px 0; width: 100%; position: relative;">
-            <div class="container">
-                <p style="font-weight: bold; text-align: left; margin-left: 20px;">©VetCare+ Company, 2025</p>
-            </div>
-        </footer>
+        <footer th:replace="layout/plantilla :: footer"></footer>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                function toggleNuevaMascotaFields() {
+                    var selectElement = document.getElementById('mascotaSelect');
+                    var nuevaMascotaDiv = document.getElementById('nuevaMascotaInfo');
+                    var tipoAnimalInput = document.getElementById('tipoAnimal');
+                    var nombreInput = document.getElementById('nombre');
+                    var sexoInputs = document.querySelectorAll('input[name="sexo"]');
+
+                    if (selectElement.value === "0") {
+                        nuevaMascotaDiv.style.display = 'block';
+                        tipoAnimalInput.required = true;
+                        nombreInput.required = true;
+                        sexoInputs.forEach(input => input.required = true);
+                    } else {
+                        nuevaMascotaDiv.style.display = 'none';
+                        tipoAnimalInput.required = false;
+                        nombreInput.required = false;
+                        sexoInputs.forEach(input => input.required = false);
+                    }
+                }
+
+                document.getElementById('mascotaSelect').addEventListener('change', toggleNuevaMascotaFields);
+                toggleNuevaMascotaFields();
+            });
+        </script>
     </body>
 </html>
-

@@ -2,36 +2,45 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
     <head th:replace="layout/plantilla :: head"></head>
-    
     <body>
         <header th:replace="layout/plantilla :: header"></header>
-
         <div style="margin-top: 100px;" class="container">
-            <h1 style="text-align: center; font-weight: bold;">Mis citas Programadas</h1>
-            
+            <h1 style="text-align: center; font-weight: bold;">Mis Citas Programadas</h1>
+
+            <!-- Mensaje de éxito -->
+            <div th:if="${success}" class="alert alert-success text-center">
+                <span th:text="${success}"></span>
+            </div>
+
+            <div class="text-end mb-3">
+                <a th:href="@{/citas/nueva}" class="btn btn-success">Nueva Cita</a>
+            </div>
             <table class="table table-striped mt-4">
                 <thead>
                     <tr>
-                        <th>Id Cita</th>
-                        <th>Id Mascota</th>
+                        <th>Id Cita</th> 
                         <th>Fecha y Hora</th>
-                        <th>Servicio</th>
-                        <th>Descripcion</th>
-                       
+                        <th>Motivo</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Mostrar mensaje si la lista está vacía -->
+                    <tr th:if="${#lists.isEmpty(citas)}">
+                        <td colspan="4" class="text-center">No tienes citas programadas.</td>
+                    </tr>
                     <tr th:each="cita : ${citas}">
-                        <td th:text="${cita.id_cita}"></td>
-                        <td th:text="${cita.id_mascota}"></td>
-                        <td th:text="${cita.fecha_cita}"></td>
-                        <td th:text="${cita.servicio}"></td>
-                        <td th:text="${cita.notas}"></td>
+                        <td th:text="${cita.idCita}"></td>
+                        <td th:text="${#dates.format(cita.fechaCita, 'dd/MM/yyyy HH:mm')}"></td> 
+                        <td th:text="${cita.notas}"></td> 
+                        <td>
+                            <a th:href="@{/citas/editar/{id}(id=${cita.idCita})}" class="btn btn-primary btn-sm">Editar</a>
+                            <a th:href="@{/citas/eliminar/{id}(id=${cita.idCita})}" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar esta cita?');">Eliminar</a>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-
         <footer style="background-color: #2f4073; color: white; padding: 30px 0; width: 100%; position: relative;">
             <div class="container">
                 <p style="font-weight: bold; text-align: left; margin-left: 20px;">©VetCare+ Company, 2025</p>
@@ -39,4 +48,3 @@
         </footer>
     </body>
 </html>
-

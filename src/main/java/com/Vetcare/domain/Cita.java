@@ -11,26 +11,29 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Cita")
+@Table(name = "cita") // Asegúrate de que el nombre de la tabla sea correcto
 @Data
 @NoArgsConstructor
 public class Cita {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_cita;
+    private int idCita; // Cambiado a camelCase
     
     @Column(name = "id_mascota")
-    private Integer id_mascota; // Cambio a Integer para permitir nulos temporalmente
+    private int idMascota; // Cambiado a camelCase
     
     @Column(name = "fecha_cita", nullable = false)
-    private Date fecha_cita;
+    private Date fechaCita; // Cambiado a camelCase
     
     @Column(name = "servicio")
     private String servicio;
     
     @Column(name = "notas")
     private String notas;
+    
+    @Column(name = "id_propietario")
+    private int idPropietario;
     
     // Campos temporales que no se almacenan en la base de datos
     @jakarta.persistence.Transient
@@ -51,10 +54,15 @@ public class Cita {
     @jakarta.persistence.Transient
     private String motivo;
     
-    public Cita(int id_mascota, Date fecha_cita, String servicio, String notas) {
-        this.id_mascota = id_mascota;
-        this.fecha_cita = fecha_cita;
+    public Cita(int idMascota, Date fechaCita, String servicio, String notas) {
+        this.idMascota = idMascota;
+        this.fechaCita = fechaCita;
         this.servicio = servicio;
         this.notas = notas;
     }
+
+    public Cita(int idCita) {
+        this.idCita = idCita;
+    }
+    
 }
