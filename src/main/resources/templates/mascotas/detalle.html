@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/plantilla :: head">
+    <style>
+        .mascota-detalle-container {
+            margin-top: 80px;
+            margin-bottom: 50px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #6c757d;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover {
+            color: #2f4073;
+        }
+        
+        .mascota-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border: none;
+        }
+        
+        .mascota-header {
+            background-color: #2f4073;
+            color: white;
+            padding: 30px;
+            position: relative;
+        }
+        
+        .mascota-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2f4073;
+            font-size: 50px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .mascota-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .mascota-id {
+            font-size: 1rem;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 5px 15px;
+            display: inline-block;
+        }
+        
+        .mascota-info-section {
+            padding: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f1f1f1;
+            color: #2f4073;
+        }
+        
+        .info-row {
+            margin-bottom: 15px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6c757d;
+        }
+        
+        .info-value {
+            font-weight: normal;
+            color: #343a40;
+        }
+        
+        .mascota-actions {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #f1f1f1;
+        }
+        
+        .citas-section {
+            margin-top: 30px;
+        }
+        
+        .cita-card {
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+            border-left: 3px solid #2f4073;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .cita-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .cita-fecha {
+            font-weight: 500;
+            color: #2f4073;
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .cita-fecha i {
+            margin-right: 8px;
+            width: 16px;
+        }
+        
+        .cita-servicio {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-left: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .cita-notas {
+            font-size: 0.9rem;
+            color: #6c757d;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            margin-left: 24px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .cita-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .empty-citas {
+            padding: 30px;
+            text-align: center;
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .status-badge {
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        
+        .status-upcoming {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status-completed {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .status-cancelled {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+    </style>
+</head>
+
+<body>
+    <header th:replace="layout/plantilla :: header"></header>
+
+    <div class="container mascota-detalle-container">
+        <a href="javascript:history.back()" class="back-link">
+            <i class="fas fa-arrow-left me-2"></i> Volver
+        </a>
+        
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="mascota-card">
+                    <!-- Cabecera con información principal -->
+                    <div class="mascota-header">
+                        <div class="row align-items-center">
+                            <div class="col-md-auto text-center text-md-start">
+                                <div class="mascota-avatar">
+                                    <i th:if="${mascota.especie == 'Perro'}" class="fas fa-dog"></i>
+                                    <i th:if="${mascota.especie == 'Gato'}" class="fas fa-cat"></i>
+                                    <i th:if="${mascota.especie != 'Perro' and mascota.especie != 'Gato'}" class="fas fa-paw"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h1 class="mascota-name" th:text="${mascota.nombreMascota}">Firulais</h1>
+                                <div class="mascota-id">
+                                    <i class="fas fa-id-card me-2"></i>
+                                    <span>ID: </span>
+                                    <span th:text="${mascota.idMascota}">1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Información general -->
+                    <div class="mascota-info-section">
+                        <h3 class="section-title">Información General</h3>
+                        
+                        <div class="row info-row">
+                            <div class="col-md-4 info-label">Especie</div>
+                            <div class="col-md-8 info-value" th:text="${mascota.especie}">Perro</div>
+                        </div>
+                        
+                        <div class="row info-row" th:if="${mascota.raza != null and mascota.raza != ''}">
+                            <div class="col-md-4 info-label">Raza</div>
+                            <div class="col-md-8 info-value" th:text="${mascota.raza}">Labrador</div>
+                        </div>
+                        
+                        <div class="row info-row" th:if="${mascota.edad != null}">
+                            <div class="col-md-4 info-label">Edad</div>
+                            <div class="col-md-8 info-value" th:text="${mascota.edad} + ' año(s)'">3 años</div>
+                        </div>
+                        
+                        <div class="row info-row">
+                            <div class="col-md-4 info-label">Propietario</div>
+                            <div class="col-md-8 info-value" th:text="${propietario != null ? propietario.nombreUsuario : 'No disponible'}">Juan Pérez</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Historial de citas -->
+                    <div class="mascota-info-section citas-section">
+                        <h3 class="section-title">Historial de Citas</h3>
+                        
+                        <!-- Mostrar mensaje si no hay citas -->
+                        <div th:if="${#lists.isEmpty(citas)}" class="empty-citas">
+                            <i class="fas fa-calendar-times fa-2x mb-3"></i>
+                            <p>No hay citas registradas para esta mascota.</p>
+                            <a th:href="@{/citas/solicitud}" class="btn btn-primary mt-2">
+                                <i class="fas fa-calendar-plus me-2"></i> Programar una cita
+                            </a>
+                        </div>
+                        
+                        <!-- Mostrar las citas -->
+                        <div th:unless="${#lists.isEmpty(citas)}">
+                            <div th:each="cita : ${citas}" class="cita-card">
+                                <div class="cita-fecha">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span th:text="${#dates.format(cita.fechaCita, 'EEEE, dd MMMM yyyy')}">Lunes, 12 Marzo 2025</span>
+                                    
+                                    <!-- Estado de la cita (próxima, completada, etc.) -->
+                                    <span class="status-badge status-upcoming ms-auto">Próxima</span>
+                                </div>
+                                
+                                <div class="cita-fecha">
+                                    <i class="fas fa-clock"></i>
+                                    <span th:text="${#dates.format(cita.fechaCita, 'HH:mm')}">15:30</span>
+                                </div>
+                                
+                                <div class="cita-servicio">
+                                    <strong>Servicio:</strong> <span th:text="${cita.servicio != null ? cita.servicio : 'No especificado'}">Consulta general</span>
+                                </div>
+                                
+                                <div th:if="${cita.notas != null && !cita.notas.isEmpty()}" class="cita-notas">
+                                    <span th:text="${cita.notas}">Detalles de la cita...</span>
+                                </div>
+                                
+                                <div class="cita-actions">
+                                    <a th:href="@{/citas/editar/{id}(id=${cita.idCita})}" class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
+                                    <a th:href="@{/citas/eliminar/{id}(id=${cita.idCita})}" 
+                                       class="btn btn-sm btn-outline-danger"
+                                       onclick="return confirm('¿Está seguro de que desea cancelar esta cita?');">
+                                        <i class="fas fa-times-circle"></i> Cancelar
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center mt-3">
+                                <a th:href="@{/citas/solicitud}" class="btn btn-primary">
+                                    <i class="fas fa-calendar-plus me-2"></i> Programar nueva cita
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Acciones disponibles -->
+                    <div class="mascota-actions">
+                        <div class="d-flex justify-content-between">
+                            <a th:href="@{/citas/solicitud}" class="btn btn-primary">
+                                <i class="fas fa-calendar-plus me-2"></i> Programar cita
+                            </a>
+                            <div>
+                                <a th:href="@{/mascotas/editar/{id}(id=${mascota.idMascota})}" class="btn btn-secondary me-2">
+                                    <i class="fas fa-edit me-2"></i> Editar
+                                </a>
+                                <a th:href="@{/mascotas/eliminar/{id}(id=${mascota.idMascota})}" 
+                                   class="btn btn-danger"
+                                   onclick="return confirm('¿Estás seguro de que quieres eliminar esta mascota? Esta acción no se puede deshacer.');">
+                                    <i class="fas fa-trash me-2"></i> Eliminar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="layout/plantilla :: footer"></footer>
+</body>
+</html>

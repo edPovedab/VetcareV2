@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/plantilla :: head">
+    <style>
+        .admin-container {
+            margin-top: 80px;
+            margin-bottom: 50px;
+        }
+        
+        .dashboard-card {
+            border-radius: 15px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card {
+            position: relative;
+            padding: 30px 20px;
+            color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            min-height: 150px;
+        }
+        
+        .stat-card-icon {
+            position: absolute;
+            bottom: -15px;
+            right: 20px;
+            font-size: 80px;
+            opacity: 0.2;
+        }
+        
+        .stat-card-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card-link {
+            color: rgba(255,255,255,0.8);
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 5px;
+            transition: color 0.3s;
+        }
+        
+        .stat-card-link:hover {
+            color: white;
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #2f4073 0%, #455b9f 100%);
+        }
+        
+        .bg-gradient-success {
+            background: linear-gradient(135deg, #28a745 0%, #48d368 100%);
+        }
+        
+        .bg-gradient-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #ffda6a 100%);
+        }
+        
+        .bg-gradient-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #50cfdf 100%);
+        }
+        
+        .section-title {
+            font-weight: 600;
+            color: #2f4073;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 70px;
+            height: 3px;
+            background-color: #bf8d7a;
+        }
+        
+        .quick-actions-card {
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .recent-activity {
+            border-left: 3px solid #f8f9fa;
+            padding-left: 20px;
+        }
+        
+        .activity-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .activity-icon {
+            position: absolute;
+            left: -30px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2f4073;
+        }
+        
+        .activity-time {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .action-card {
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            height: 100%;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .action-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .action-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .action-description {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+
+<body>
+    <header th:replace="layout/plantilla :: header"></header>
+
+    <div class="container admin-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="section-title mb-0">Panel de Administración</h2>
+            <div>
+                <span class="d-inline-block me-3">
+                    <i class="fas fa-calendar-day me-2"></i>
+                    <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}">01/01/2023</span>
+                </span>
+                <a href="#" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-sync-alt me-2"></i> Actualizar
+                </a>
+            </div>
+        </div>
+        
+        <!-- Tarjetas de estadísticas -->
+        <div class="row g-4 mb-5">
+            <!-- Usuarios -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card bg-gradient-primary">
+                    <div class="stat-card-title">Usuarios</div>
+                    <div class="stat-card-value" th:text="${totalUsuarios}">125</div>
+                    <a th:href="@{/admin/usuarios}" class="stat-card-link">
+                        Ver todos <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                    <div class="stat-card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mascotas -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card bg-gradient-success">
+                    <div class="stat-card-title">Mascotas</div>
+                    <div class="stat-card-value" th:text="${totalMascotas}">89</div>
+                    <a th:href="@{/admin/mascotas}" class="stat-card-link">
+                        Ver todas <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                    <div class="stat-card-icon">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Citas -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card bg-gradient-warning">
+                    <div class="stat-card-title">Citas</div>
+                    <div class="stat-card-value" th:text="${totalCitas}">56</div>
+                    <a th:href="@{/admin/citas}" class="stat-card-link">
+                        Ver todas <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                    <div class="stat-card-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Productos -->
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card bg-gradient-info">
+                    <div class="stat-card-title">Productos</div>
+                    <div class="stat-card-value" th:text="${totalProductos}">32</div>
+                    <a th:href="@{/admin/productos}" class="stat-card-link">
+                        Ver todos <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                    <div class="stat-card-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Acciones rápidas -->
+        <div class="row mb-5">
+            <div class="col-lg-12">
+                <h3 class="section-title">Acciones Rápidas</h3>
+                <div class="row g-4">
+                    <!-- Nueva cita -->
+                    <div class="col-lg-3 col-md-6">
+                        <a th:href="@{/citas/nueva}" class="text-decoration-none">
+                            <div class="action-card shadow-sm bg-white">
+                                <div class="action-icon text-primary">
+                                    <i class="fas fa-calendar-plus"></i>
+                                </div>
+                                <div class="action-title">Nueva Cita</div>
+                                <p class="action-description">Programa una nueva cita para un cliente</p>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Nuevo usuario -->
+                    <div class="col-lg-3 col-md-6">
+                        <a th:href="@{/admin/usuarios/nuevo}" class="text-decoration-none">
+                            <div class="action-card shadow-sm bg-white">
+                                <div class="action-icon text-success">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div class="action-title">Nuevo Usuario</div>
+                                <p class="action-description">Registra un nuevo usuario en el sistema</p>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Nueva mascota -->
+                    <div class="col-lg-3 col-md-6">
+                        <a th:href="@{/admin/mascotas/nuevo}" class="text-decoration-none">
+                            <div class="action-card shadow-sm bg-white">
+                                <div class="action-icon text-warning">
+                                    <i class="fas fa-paw"></i>
+                                </div>
+                                <div class="action-title">Nueva Mascota</div>
+                                <p class="action-description">Registra una nueva mascota en el sistema</p>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <!-- Nuevo producto -->
+                    <div class="col-lg-3 col-md-6">
+                        <a th:href="@{/productos/nuevo}" class="text-decoration-none">
+                            <div class="action-card shadow-sm bg-white">
+                                <div class="action-icon text-info">
+                                    <i class="fas fa-box-open"></i>
+                                </div>
+                                <div class="action-title">Nuevo Producto</div>
+                                <p class="action-description">Añade un nuevo producto al catálogo</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Últimas citas -->
+            <div class="col-lg-6 mb-4">
+                <div class="card dashboard-card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Últimas Citas</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Mascota</th>
+                                        <th>Fecha</th>
+                                        <th>Servicio</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:if="${#lists.isEmpty(ultimasCitas)}">
+                                        <td colspan="5" class="text-center">No hay citas registradas</td>
+                                    </tr>
+                                    <tr th:each="cita : ${ultimasCitas}" th:if="${!#lists.isEmpty(ultimasCitas)}">
+                                        <td th:text="${cita.idCita}"></td>
+                                        <td th:text="${cita.nombre != null ? cita.nombre : 'No disponible'}"></td>
+                                        <td th:text="${#dates.format(cita.fechaCita, 'dd/MM/yyyy HH:mm')}"></td>
+                                        <td th:text="${cita.servicio != null ? cita.servicio : 'No especificado'}"></td>
+                                        <td>
+                                            <a th:href="@{/citas/editar/{id}(id=${cita.idCita})}" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer text-end">
+                        <a th:href="@{/admin/citas}" class="btn btn-sm btn-outline-primary">Ver todas las citas</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Últimos productos -->
+            <div class="col-lg-6 mb-4">
+                <div class="card dashboard-card h-100">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">Últimos Productos</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>Precio</th>
+                                        <th>Stock</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:if="${#lists.isEmpty(ultimosProductos)}">
+                                        <td colspan="5" class="text-center">No hay productos registrados</td>
+                                    </tr>
+                                    <tr th:each="producto : ${ultimosProductos}" th:if="${!#lists.isEmpty(ultimosProductos)}" th:object="${producto}">
+                                        <td th:text="*{idProducto}"></td>
+                                        <td th:text="*{nombreProducto}"></td>
+                                        <td th:text="' + *{precio}"></td>
+                                        <td th:text="*{stock}"></td>
+                                        <td>
+                                            <span class="badge" th:classappend="*{disponible} ? 'bg-success' : 'bg-danger'"
+                                                  th:text="*{disponible} ? 'Disponible' : 'Agotado'">
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer text-end">
+                        <a th:href="@{/admin/productos}" class="btn btn-sm btn-outline-info">Ver todos los productos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="layout/plantilla :: footer"></footer>
+</body>
+</html>

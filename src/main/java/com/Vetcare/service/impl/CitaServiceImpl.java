@@ -12,6 +12,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +43,17 @@ public class CitaServiceImpl implements CitaService {
 
     @Override
     public List<Cita> getCitas(boolean activas) {
-        return citaRepository.findAll();
+        List<Cita> todasLasCitas = citaRepository.findAll();
+        
+        if (activas) {
+            // Si se solicitan solo citas activas, filtrar aquellas con fecha futura
+            Date ahora = new Date();
+            return todasLasCitas.stream()
+                .filter(cita -> cita.getFechaCita() != null && cita.getFechaCita().after(ahora))
+                .collect(Collectors.toList());
+        } else {
+            return todasLasCitas;
+        }
     }
 
     @Override
@@ -53,6 +64,24 @@ public class CitaServiceImpl implements CitaService {
     @Override
     public List<Cita> obtenerTodasLasCitas() {
         return citaRepository.findAll();
+    }
+    
+    @Override
+    public List<Cita> getCitasPorMascota(Integer idMascota) {
+        return citaRepository.findByIdMascota(idMascota);
+    }
+    
+    @Override
+    public List<Cita> getCitasPorPropietario(Integer idPropietario) {
+        // Primero obtenemos todas las mascotas del propietario
+        List<Mascota> mascotasPropietario = mascotaDao.findByIdPropietario(idPropietario);
+        
+        // Luego obtenemos todas las citas de esas mascotas
+        return citaRepository.findByIdMascotaIn(
+            mascotasPropietario.stream()
+                .map(Mascota::getIdMascota)
+                .collect(Collectors.toList())
+        );
     }
 
     @Override
@@ -70,7 +99,8 @@ public class CitaServiceImpl implements CitaService {
                 }
             } else {
                 // Buscar si ya existe una mascota con el mismo nombre y propietario
-                Optional<Mascota> mascotaExistente = mascotaDao.findByIdMascotaAndIdPropietario(idMascota, idPropietario);
+                Optional<Mascota> mascotaExistente =
+                    mascotaDao.findByIdMascotaAndIdPropietario(idMascota, idPropietario);
 
                 if (mascotaExistente.isPresent()) {
                     idMascota = mascotaExistente.get().getIdMascota();
@@ -82,7 +112,6 @@ public class CitaServiceImpl implements CitaService {
                     nuevaMascota.setNombreMascota(cita.getNombre());
                     nuevaMascota.setEspecie(cita.getTipoAnimal());
                     nuevaMascota.setIdPropietario(idPropietario);
-
                     mascotaDao.save(nuevaMascota);
                     idMascota = nuevaMascota.getIdMascota();
                 }
@@ -90,18 +119,26 @@ public class CitaServiceImpl implements CitaService {
 
             // Asignar ID de mascota a la cita
             cita.setIdMascota(idMascota);
+            cita.setIdPropietario(idPropietario);
 
             // Procesar la fecha/hora si está presente
             if (cita.getFechaHora() != null && !cita.getFechaHora().isEmpty()) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss]");
+                DateTimeFormatter formatter =
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss]");
                 LocalDateTime fechaHoraLocal = LocalDateTime.parse(cita.getFechaHora(), formatter);
-                Date fechaCita = Date.from(fechaHoraLocal.atZone(ZoneId.systemDefault()).toInstant());
+                Date fechaCita =
+                    Date.from(fechaHoraLocal.atZone(ZoneId.systemDefault()).toInstant());
                 cita.setFechaCita(fechaCita);
             }
 
             // Mantener notas y servicio
-            cita.setNotas(cita.getMotivo());
-            cita.setServicio(cita.getTipoAnimal());
+            if (cita.getMotivo() != null && !cita.getMotivo().isEmpty()) {
+                cita.setNotas(cita.getMotivo());
+            }
+            
+            if (cita.getTipoAnimal() != null && !cita.getTipoAnimal().isEmpty()) {
+                cita.setServicio(cita.getTipoAnimal());
+            }
 
             // Guardar la cita
             citaRepository.save(cita);

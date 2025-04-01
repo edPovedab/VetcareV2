@@ -1,4 +1,3 @@
-// MascotaServiceImpl.java
 package com.Vetcare.service.impl;
 
 import com.Vetcare.dao.MascotaDao;
@@ -20,9 +19,6 @@ public class MascotaServiceImpl implements MascotaService {
     public List<Mascota> listarMascotas() {
         List<Mascota> mascotas = mascotaDao.findAll();
         System.out.println("Mascotas en BD: " + mascotas.size());
-        for (Mascota m : mascotas) {
-            System.out.println("Mascota: " + m.getIdMascota() + " - " + m.getNombreMascota());
-        }
         return mascotas;
     }
 
@@ -47,7 +43,12 @@ public class MascotaServiceImpl implements MascotaService {
     @Override
     @Transactional(readOnly = true)
     public List<Mascota> buscarPorId(int idMascota) {
-        return mascotaDao.findByIdMascota(idMascota); // Usa el método correcto de MascotaDao
+        return mascotaDao.findByIdMascota(idMascota);
     }
-
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<Mascota> buscarPorPropietario(Integer idPropietario) {
+        return mascotaDao.findByIdPropietario(idPropietario);
+    }
 }

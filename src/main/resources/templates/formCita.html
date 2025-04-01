@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/plantilla :: head">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .cita-form-container {
+            margin-top: 80px;
+            margin-bottom: 50px;
+        }
+        
+        .form-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: none;
+        }
+        
+        .form-header {
+            background-color: #2f4073;
+            color: white;
+            padding: 25px;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .form-header h2 {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .form-header p {
+            margin-bottom: 0;
+            opacity: 0.9;
+        }
+        
+        .form-body {
+            padding: 30px;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #2f4073;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 1px solid #e1e5eb;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #bf8d7a;
+            box-shadow: 0 0 0 0.25rem rgba(191, 141, 122, 0.25);
+        }
+        
+        .btn-guardar {
+            background-color: #2f4073;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-guardar:hover {
+            background-color: #243261;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(47, 64, 115, 0.4);
+        }
+        
+        .btn-cancelar {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-cancelar:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <header th:replace="layout/plantilla :: header"></header>
+
+    <div class="container cita-form-container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="form-card">
+                    <div class="form-header">
+                        <h2 th:text="${cita.idCita != 0 ? 'Editar Cita' : 'Nueva Cita'}">Editar Cita</h2>
+                        <p>Complete los detalles de la cita veterinaria</p>
+                    </div>
+                    
+                    <div class="form-body">
+                        <form th:action="@{/citas/guardar}" method="post" th:object="${cita}">
+                            <!-- ID oculto para edición -->
+                            <input type="hidden" th:field="*{idCita}">
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="mascota" class="form-label">Mascota</label>
+                                    <select id="mascota" class="form-select" th:field="*{idMascota}" required>
+                                        <option value="">Seleccione una mascota</option>
+                                        <!-- Aquí deberías tener una lista de mascotas -->
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="fechaHora" class="form-label">Fecha y Hora</label>
+                                    <input type="text" id="fechaHora" class="form-control" 
+                                           th:value="${#dates.format(cita.fechaCita, 'yyyy-MM-dd HH:mm')}" 
+                                           name="fechaHora" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="servicio" class="form-label">Servicio</label>
+                                    <select id="servicio" class="form-select" th:field="*{servicio}" required>
+                                        <option value="">Seleccione un servicio</option>
+                                        <option value="Consulta general">Consulta general</option>
+                                        <option value="Vacunación">Vacunación</option>
+                                        <option value="Control de parásitos">Control de parásitos</option>
+                                        <option value="Problema de salud">Problema de salud</option>
+                                        <option value="Cirugía">Cirugía</option>
+                                        <option value="Seguimiento">Seguimiento</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="telefono" class="form-label">Teléfono de contacto</label>
+                                    <input type="tel" id="telefono" class="form-control" th:field="*{telefono}" 
+                                           placeholder="Ej: 123-456-7890" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="notas" class="form-label">Notas</label>
+                                <textarea id="notas" class="form-control" th:field="*{notas}" rows="4" 
+                                          placeholder="Detalles adicionales sobre la cita..."></textarea>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between mt-4">
+                                <a href="javascript:history.back()" class="btn btn-cancelar">
+                                    <i class="fas fa-times me-2"></i> Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-guardar">
+                                    <i class="fas fa-save me-2"></i> Guardar Cita
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="layout/plantilla :: footer"></footer>
+    
+    <!-- Flatpickr para el selector de fecha y hora -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar el selector de fecha y hora
+            flatpickr("#fechaHora", {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                minDate: "today",
+                locale: "es",
+                time_24hr: true,
+                minTime: "08:00",
+                maxTime: "18:00",
+                minuteIncrement: 30,
+                disable: [
+                    function(date) {
+                        // Deshabilitar domingos (0) y sábados por la tarde
+                        return (date.getDay() === 0 || 
+                              (date.getDay() === 6 && date.getHours() >= 13));
+                    }
+                ]
+            });
+        });
+    </script>
+</body>
+</html>

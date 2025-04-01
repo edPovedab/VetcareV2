@@ -1,58 +1,191 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="layout/plantilla :: head">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-        <body>
-            <header th:replace="layout/plantilla :: header"></header>
+<head th:replace="layout/plantilla :: head">
+    <style>
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 15px;
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .product-image {
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2f4073;
+        }
+        
+        .product-category {
+            display: inline-block;
+            background-color: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+        
+        .product-availability {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .in-stock {
+            color: #28a745;
+        }
+        
+        .out-of-stock {
+            color: #dc3545;
+        }
+        
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            height: 50px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        .product-description {
+            color: #6c757d;
+            height: 75px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+        
+        .section-title {
+            position: relative;
+            margin-bottom: 40px;
+            padding-bottom: 15px;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: #bf8d7a;
+            bottom: 0;
+            left: 0;
+        }
+        
+        .filters {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
 
-            <div class="container mt-5">
-                <h2 class="text-center mb-4">Nuestros Productos</h2>
-                <div class="row">
-                    <!-- Producto 1 -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card product-card">
-                            <img src="images/meloxicam.jpg" class="card-img-top product-image">
-                                <div class="card-body">
-                                    <h5 class="card-title">Meloxicam</h5>
-                                    <p class="card-text">Es un medicamento antiinflamatorio no esteroideo (AINE) que está aprobado para los gatos como una inyección única administrada antes de la cirugía para controlar el dolor y la inflamación después de esterilizaciones, castraciones y cirugías ortopédicas.</p>
-                                    <p class="card-text"><strong>Precio: $20.00</strong></p>
-                                    <a href="#" class="btn btn-primary">Solicitar medicamento</a>
-                                </div>
-                        </div>
-                    </div>
-                    <!-- Producto 2 -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card product-card">
-                            <img src="images/NexGard.jpg"  class="card-img-top product-image">
-                                <div class="card-body">
-                                    <h5 class="card-title">NexGard</h5>
-                                    <p class="card-text">Es un medicamento para perros que sirve para tratar y prevenir infestaciones por pulgas, garrapatas, ácaros de la sarna y otros parásitos</p>
-                                    <p class="card-text"><strong>Precio: $25.00</strong></p>
-                                    <a href="#" class="btn btn-primary">Solicitar medicamento</a>
-                                </div>
-                        </div>
-                    </div>
-                    <!-- Producto 3 -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card product-card">
-                            <img src="images/naxpet.jpg"  class="card-img-top product-image">
-                                <div class="card-body">
-                                    <h5 class="card-title">Naxpet</h5>
-                                    <p class="card-text"> Es un medicamento veterinario que se usa para tratar el dolor, la inflamación y la fiebre en perros y gatos.</p>
-                                    <p class="card-text"><strong>Precio: $15.00</strong></p>
-                                    <a href="#" class="btn btn-primary">Solicitar medicamento</a>
-                                </div>
+<body>
+    <header th:replace="layout/plantilla :: header"></header>
+
+    <div class="container mt-5 pt-5">
+        <h2 class="section-title">Nuestros Productos y Medicamentos</h2>
+        
+        <!-- Filtros de productos -->
+        <div class="filters shadow-sm">
+            <form th:action="@{/productos}" method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Buscar por nombre...">
+                </div>
+                
+                <div class="col-md-3">
+                    <label for="categoria" class="form-label">Categoría</label>
+                    <select class="form-select" id="categoria" name="categoria">
+                        <option value="">Todas las categorías</option>
+                        <option value="Medicamentos">Medicamentos</option>
+                        <option value="Alimentos">Alimentos</option>
+                        <option value="Accesorios">Accesorios</option>
+                        <option value="Higiene">Higiene</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <label for="disponibilidad" class="form-label">Disponibilidad</label>
+                    <select class="form-select" id="disponibilidad" name="disponibilidad">
+                        <option value="">Todos</option>
+                        <option value="disponible">Disponibles</option>
+                        <option value="nodisponible">No disponibles</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-2"></i> Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Mensaje si no hay productos -->
+        <div th:if="${#lists.isEmpty(productos)}" class="alert alert-info text-center">
+            No se encontraron productos que coincidan con los criterios de búsqueda.
+        </div>
+        
+        <!-- Listado de productos -->
+        <div class="row g-4">
+            <div th:each="producto : ${productos}" class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card product-card h-100">
+                    <img th:src="${producto.imagenUrl != null ? producto.imagenUrl : '/images/product-placeholder.jpg'}" 
+                         class="card-img-top product-image" alt="Imagen del producto">
+                    
+                    <div class="card-body d-flex flex-column">
+                        <span class="product-category" th:text="${producto.categoria}">Categoría</span>
+                        <h5 class="product-title" th:text="${producto.nombreProducto}">Nombre del Producto</h5>
+                        <p class="product-description" th:text="${producto.descripcion}">Descripción del producto...</p>
+                        
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="product-price" th:text="'$' + ${producto.precio}">$20.00</span>
+                                <span class="product-availability" 
+                                      th:class="${producto.disponible ? 'product-availability in-stock' : 'product-availability out-of-stock'}"
+                                      th:text="${producto.disponible ? 'En stock' : 'Agotado'}">
+                                    En stock
+                                </span>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <a th:href="@{/productos/detalle/{id}(id=${producto.idProducto})}" class="btn btn-outline-primary">
+                                    <i class="fas fa-info-circle me-2"></i> Ver detalles
+                                </a>
+                                
+                                <!-- Botón visible solo para administradores -->
+                                <a sec:authorize="hasAuthority('ADMIN')" 
+                                   th:href="@{/productos/editar/{id}(id=${producto.idProducto})}" 
+                                   class="btn btn-outline-secondary btn-sm mt-2">
+                                    <i class="fas fa-edit me-1"></i> Editar
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <footer class="text-center mt-5" style="background-color: #2f4073; color: white; padding: 20px;">
-                <p>© VetCare+ Company, 2025</p>
-                <p>Teléfono: 5555-5555 / 2600-5555</p>
-            </footer>
-
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        </body>
+    <footer th:replace="layout/plantilla :: footer"></footer>
+</body>
 </html>

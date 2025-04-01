@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/plantilla :: head">
+    <style>
+        .admin-container {
+            margin-top: 80px;
+            margin-bottom: 50px;
+        }
+        
+        .page-header {
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-weight: 600;
+            color: #2f4073;
+        }
+        
+        .form-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: none;
+        }
+        
+        .form-card .card-header {
+            background-color: #2f4073;
+            color: white;
+            font-weight: 500;
+            padding: 15px 20px;
+        }
+        
+        .form-card .card-body {
+            padding: 30px;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background-color: #5a6268;
+            color: white;
+        }
+        
+        .image-preview {
+            width: 100%;
+            height: 200px;
+            background-color: #f8f9fa;
+            border: 1px dashed #dee2e6;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body>
+    <header th:replace="layout/plantilla :: header"></header>
+
+    <div class="container admin-container">
+        <div class="page-header d-flex justify-content-between align-items-center">
+            <h2 class="page-title" th:text="${accion} + ' Producto'">Editar Producto</h2>
+            <a th:href="@{/admin/productos}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i> Volver a la lista
+            </a>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="card form-card">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0" th:text="${accion} + ' Producto'">Editar Producto</h3>
+                    </div>
+                    
+                    <div class="card-body">
+                        <form th:action="@{/productos/guardar}" method="post" th:object="${producto}">
+                            <!-- ID oculto para edición -->
+                            <input type="hidden" th:field="*{idProducto}">
+                            
+                            <div class="row g-3">
+                                <!-- Nombre del producto -->
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <label for="nombreProducto" class="form-label">Nombre del producto <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nombreProducto" th:field="*{nombreProducto}" required>
+                                    </div>
+                                </div>
+                                
+                                <!-- Categoría -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="categoria" class="form-label">Categoría <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="categoria" th:field="*{categoria}" required>
+                                            <option value="">Seleccionar categoría</option>
+                                            <option value="Medicamentos">Medicamentos</option>
+                                            <option value="Alimentos">Alimentos</option>
+                                            <option value="Accesorios">Accesorios</option>
+                                            <option value="Higiene">Higiene</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <!-- Precio -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="precio" class="form-label">Precio <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="precio" th:field="*{precio}" required step="0.01" min="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Stock -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="stock" class="form-label">Stock <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="stock" th:field="*{stock}" required min="0">
+                                    </div>
+                                </div>
+                                
+                                <!-- URL de la imagen -->
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="imagenUrl" class="form-label">URL de la imagen</label>
+                                        <input type="url" class="form-control" id="imagenUrl" th:field="*{imagenUrl}" placeholder="https://ejemplo.com/imagen.jpg">
+                                        
+                                        <!-- Vista previa de la imagen -->
+                                        <div class="image-preview mt-2" id="imagePreviewContainer">
+                                            <img id="imagePreview" th:src="${producto.imagenUrl != null ? producto.imagenUrl : '/images/product-placeholder.jpg'}" alt="Vista previa">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Descripción -->
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="descripcion" class="form-label">Descripción <span class="text-danger">*</span></label>
+                                        <textarea class="form-control" id="descripcion" th:field="*{descripcion}" rows="5" required></textarea>
+                                    </div>
+                                </div>
+                                
+                                <!-- Disponibilidad -->
+                                <div class="col-md-12">
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="disponible" th:field="*{disponible}">
+                                        <label class="form-check-label" for="disponible">Producto disponible</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                <a th:href="@{/admin/productos}" class="btn btn-lg btn-cancel me-md-2">
+                                    <i class="fas fa-times me-2"></i> Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-lg btn-primary">
+                                    <i class="fas fa-save me-2"></i> Guardar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="layout/plantilla :: footer"></footer>
+    
+    <script>
+        // Script para previsualizar la imagen
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageUrlInput = document.getElementById('imagenUrl');
+            const imagePreview = document.getElementById('imagePreview');
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            
+            // Actualizar vista previa cuando cambie la URL
+            imageUrlInput.addEventListener('input', function() {
+                const imageUrl = this.value.trim();
+                
+                if (imageUrl) {
+                    imagePreview.src = imageUrl;
+                    previewContainer.style.display = 'flex';
+                } else {
+                    imagePreview.src = '/images/product-placeholder.jpg';
+                }
+            });
+            
+            // Manejo de errores de carga de imagen
+            imagePreview.addEventListener('error', function() {
+                this.src = '/images/product-placeholder.jpg';
+            });
+        });
+    </script>
+</body>
+</html>

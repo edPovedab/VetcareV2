@@ -1,4 +1,3 @@
-// MascotaService.java
 package com.Vetcare.service;
 
 import com.Vetcare.domain.Mascota;
@@ -11,4 +10,6 @@ public interface MascotaService {
     void eliminar(Mascota mascota);
     List<Mascota> buscarPorId(int idMascota);
     
+    // Agregamos este método para buscar mascotas por propietario
+    List<Mascota> buscarPorPropietario(Integer idPropietario);
 }

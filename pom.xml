@@ -2,25 +2,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.4.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-
     <groupId>com.Vetcare</groupId>
     <artifactId>Vetcare</artifactId>
     <version>1.0.0</version>
     <name>Vetcare</name>
     <description>Control de Citas Veterinaria</description>
-
     <properties>
         <java.version>17</java.version>
-        <start-class>com.Vetcare.VetcareApplication</start-class>  <!-- Clase principal de la app -->
+        <start-class>com.Vetcare.VetcareApplication</start-class> <!-- Clase principal de la app -->
     </properties>
-
     <dependencies>
         <!-- Spring Boot Dependencies -->
         <dependency>
@@ -46,14 +42,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
+        
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
-
+        
         <!-- WebJars for Frontend Libraries -->
         <dependency>
             <groupId>org.webjars</groupId>
@@ -80,7 +76,7 @@
             <artifactId>webjars-locator</artifactId>
             <version>0.46</version>
         </dependency>
-
+        
         <!-- Database -->
         <dependency>
             <groupId>com.mysql</groupId>
@@ -92,19 +88,27 @@
             <artifactId>jakarta.persistence-api</artifactId>
             <version>3.1.0</version>
         </dependency>
-
-        <!-- Firebase -->
+        
+        <!-- Spring Security -->
         <dependency>
-            <groupId>com.google.firebase</groupId>
-            <artifactId>firebase-admin</artifactId>
-            <version>9.1.1</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+        </dependency>
+        
         <!-- Validación -->
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
             <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>8.0.2.Final</version>
         </dependency>
     </dependencies>
 
@@ -126,15 +130,13 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>${start-class}</mainClass> <!-- Usa la propiedad start-class -->
+                    <mainClass>${start-class}</mainClass>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 </project>

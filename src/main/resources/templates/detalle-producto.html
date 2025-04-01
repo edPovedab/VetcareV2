@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/plantilla :: head">
+    <style>
+        .product-gallery {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .product-main-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 30px;
+        }
+        
+        .product-title {
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #2f4073;
+        }
+        
+        .product-category {
+            display: inline-block;
+            background-color: #f8f9fa;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+        
+        .product-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2f4073;
+            margin-bottom: 20px;
+        }
+        
+        .product-availability {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        .in-stock {
+            color: #28a745;
+        }
+        
+        .out-of-stock {
+            color: #dc3545;
+        }
+        
+        .product-description {
+            color: #6c757d;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .product-actions {
+            margin-top: 30px;
+        }
+        
+        .quantity-selector {
+            width: 120px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            position: relative;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            display: block;
+            width: 70px;
+            height: 3px;
+            background: #bf8d7a;
+            bottom: 0;
+            left: 0;
+        }
+        
+        .back-to-products {
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <header th:replace="layout/plantilla :: header"></header>
+
+    <div class="container mt-5 pt-5">
+        <!-- Botón de volver -->
+        <a th:href="@{/productos}" class="back-to-products text-decoration-none">
+            <i class="fas fa-arrow-left me-2"></i> Volver a productos
+        </a>
+        
+        <div class="row g-4">
+            <!-- Galería de imágenes -->
+            <div class="col-lg-6">
+                <div class="product-gallery">
+                    <img th:src="${producto.imagenUrl != null ? producto.imagenUrl : '/images/product-placeholder.jpg'}" 
+                         class="product-main-image img-fluid" alt="Imagen del producto">
+                </div>
+            </div>
+            
+            <!-- Información del producto -->
+            <div class="col-lg-6">
+                <div class="product-info">
+                    <span class="product-category" th:text="${producto.categoria}">Categoría</span>
+                    <h1 class="product-title" th:text="${producto.nombreProducto}">Nombre del Producto</h1>
+                    
+                    <div class="product-price" th:text="'$' + ${producto.precio}">$20.00</div>
+                    
+                    <div class="product-availability" 
+                         th:class="${producto.disponible ? 'product-availability in-stock' : 'product-availability out-of-stock'}">
+                        <i th:class="${producto.disponible ? 'fas fa-check-circle' : 'fas fa-times-circle'}" class="me-2"></i>
+                        <span th:text="${producto.disponible ? 'En stock' : 'Producto no disponible'}">En stock</span>
+                        <span th:if="${producto.disponible}" th:text="'(' + ${producto.stock} + ' unidades)'"></span>
+                    </div>
+                    
+                    <h5 class="section-title">Descripción</h5>
+                    <div class="product-description" th:text="${producto.descripcion}">
+                        Descripción detallada del producto...
+                    </div>
+                    
+                    <!-- Acciones del producto (solo visibles si el producto está disponible) -->
+                    <div class="product-actions" th:if="${producto.disponible}">
+                        <div class="row g-3">
+                            <div class="col-auto">
+                                <div class="input-group quantity-selector">
+                                    <button class="btn btn-outline-secondary" type="button" id="decreaseQuantity">-</button>
+                                    <input type="number" class="form-control text-center" value="1" min="1" th:max="${producto.stock}" id="quantity">
+                                    <button class="btn btn-outline-secondary" type="button" id="increaseQuantity">+</button>
+                                </div>
+                            </div>
+                            
+                            <div class="col">
+                                <button class="btn btn-primary btn-lg w-100" type="button" id="addToCart">
+                                    <i class="fas fa-shopping-cart me-2"></i> Solicitar medicamento
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mensaje para productos no disponibles -->
+                    <div class="alert alert-warning" th:if="${!producto.disponible}">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Este producto no está disponible actualmente. Por favor, consulta con el personal de la veterinaria para más información.
+                    </div>
+                    
+                    <!-- Botones administrativos (solo para administradores) -->
+                    <div class="mt-4 pt-3 border-top" sec:authorize="hasAuthority('ADMIN')">
+                        <h6 class="mb-3">Opciones de administrador</h6>
+                        <div class="d-flex gap-2">
+                            <a th:href="@{/productos/editar/{id}(id=${producto.idProducto})}" class="btn btn-outline-primary">
+                                <i class="fas fa-edit me-2"></i> Editar producto
+                            </a>
+                            <a th:href="@{/productos/eliminar/{id}(id=${producto.idProducto})}" 
+                               class="btn btn-outline-danger"
+                               onclick="return confirm('¿Estás seguro de que quieres eliminar este producto?');">
+                                <i class="fas fa-trash me-2"></i> Eliminar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="layout/plantilla :: footer"></footer>
+    
+    <script>
+        // JavaScript para controlar la cantidad
+        document.addEventListener('DOMContentLoaded', function() {
+            const quantityInput = document.getElementById('quantity');
+            const decreaseBtn = document.getElementById('decreaseQuantity');
+            const increaseBtn = document.getElementById('increaseQuantity');
+            const addToCartBtn = document.getElementById('addToCart');
+            
+            // Disminuir cantidad
+            decreaseBtn.addEventListener('click', function() {
+                let value = parseInt(quantityInput.value);
+                if (value > 1) {
+                    quantityInput.value = value - 1;
+                }
+            });
+            
+            // Aumentar cantidad
+            increaseBtn.addEventListener('click', function() {
+                let value = parseInt(quantityInput.value);
+                let max = parseInt(quantityInput.getAttribute('max'));
+                if (value < max) {
+                    quantityInput.value = value + 1;
+                }
+            });
+            
+            // Botón de solicitar medicamento
+            addToCartBtn.addEventListener('click', function() {
+                const cantidad = quantityInput.value;
+                const productoId = window.location.pathname.split('/').pop();
+                const productoNombre = document.querySelector('.product-title').textContent;
+                
+                alert(`Has solicitado ${cantidad} unidad(es) del producto: ${productoNombre}`);
+                
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/plantilla :: head"></head>
+
+<body>
+    <header th:replace="layout/plantilla :: header"></header>
+
+    <div class="container mt-5 pt-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="text-center m-0">Bienvenido a VetCare+</h2>
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="mb-4">¡Hola, <span th:text="${#authentication.name}"></span>!</h3>
+                        
+                        <p class="lead mb-4">¿Qué te gustaría hacer hoy?</p>
+                        
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Gestionar Citas</h5>
+                                        <p class="card-text">Ver, programar o modificar tus citas veterinarias</p>
+                                        <a th:href="@{/citas/listar}" class="btn btn-primary">
+                                            <i class="fas fa-calendar-alt me-2"></i> Ver Mis Citas
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Gestionar Mascotas</h5>
+                                        <p class="card-text">Administra la información de tus mascotas</p>
+                                        <a th:href="@{/mascotas/mis-mascotas}" class="btn btn-primary">
+                                            <i class="fas fa-paw me-2"></i> Mis Mascotas
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Ver Productos</h5>
+                                        <p class="card-text">Explora nuestro catálogo de productos y medicamentos</p>
+                                        <a th:href="@{/productos}" class="btn btn-primary">
+                                            <i class="fas fa-box-open me-2"></i> Ver Productos
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Mi Perfil</h5>
+                                        <p class="card-text">Administra tu información personal</p>
+                                        <a th:href="@{/perfil}" class="btn btn-primary">
+                                            <i class="fas fa-user-circle me-2"></i> Ver Mi Perfil
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Sección solo para administradores -->
+                        <div sec:authorize="hasAuthority('ADMIN')" class="mt-5">
+                            <h4 class="mb-4 text-primary">Opciones de Administrador</h4>
+                            
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <div class="card h-100 shadow-sm">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Usuarios</h5>
+                                            <p class="card-text">Administrar usuarios del sistema</p>
+                                            <a th:href="@{/admin/usuarios}" class="btn btn-secondary">
+                                                <i class="fas fa-users me-2"></i> Gestionar
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="card h-100 shadow-sm">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Mascotas</h5>
+                                            <p class="card-text">Ver todas las mascotas registradas</p>
+                                            <a th:href="@{/admin/mascotas}" class="btn btn-secondary">
+                                                <i class="fas fa-paw me-2"></i> Gestionar
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="card h-100 shadow-sm">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Productos</h5>
+                                            <p class="card-text">Administrar catálogo de productos</p>
+                                            <a th:href="@{/admin/productos}" class="btn btn-secondary">
+                                                <i class="fas fa-box-open me-2"></i> Gestionar
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <a th:href="@{/admin/dashboard}" class="btn btn-lg btn-outline-primary">
+                                    <i class="fas fa-tachometer-alt me-2"></i> 
+                                    Ir al Panel de Administración
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="layout/plantilla :: footer"></footer>
+</body>
+</html>

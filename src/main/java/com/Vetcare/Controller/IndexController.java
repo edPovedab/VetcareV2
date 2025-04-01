@@ -1,5 +1,6 @@
 package com.Vetcare.Controller;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,43 +11,48 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(Model model) {
-        model.addAttribute("attribute", "value");
+        model.addAttribute("titulo", "Inicio - VetCare+");
         return "index";
     }
 
     @RequestMapping("/contacto")
     public String contacto(Model model) {
-        model.addAttribute("attribute", "value");
+        model.addAttribute("titulo", "Contáctenos - VetCare+");
         return "contacto";
     }
 
     @RequestMapping("/informacion")
     public String informacion(Model model) {
-        model.addAttribute("attribute", "value");
+        model.addAttribute("titulo", "Acerca de nosotros - VetCare+");
         return "informacion";
     }
 
-    // Cambiar la ruta para evitar conflicto
-    @GetMapping("/redirigir_solicitud_citas") // Cambiar la ruta
-    public String redirSolicitudCitas() {
-        return "/solicitud de citas"; // Asegúrate de que esta vista exista
+    // Redirección para solicitud de citas
+    @GetMapping("/agendar-cita")
+    public String agendarCita(Authentication authentication) {
+        // Si el usuario está autenticado, ir directamente a la página de solicitud de citas
+        if (authentication != null && authentication.isAuthenticated()) {
+            return "redirect:/citas/solicitud";
+        } else {
+            // Si no está autenticado, redirigir al login
+            return "redirect:/login";
+        }
     }
 
     @RequestMapping("/negocio")
     public String negocio(Model model) {
-        model.addAttribute("attribute", "value");
+        model.addAttribute("titulo", "Asesorías - VetCare+");
         return "negocio";
     }
 
-    @RequestMapping("/login")
-    public String inicioSesion(Model model) {
-        model.addAttribute("attribute", "value");
-        return "login";
+    @RequestMapping("/productos")
+    public String productos(Model model) {
+        model.addAttribute("titulo", "Productos - VetCare+");
+        return "productos";
     }
 
-    @RequestMapping("/productos")
-    public String producto(Model model) {
-        model.addAttribute("attribute", "value");
-        return "productos";
+    @GetMapping("/acceso-denegado")
+    public String accesoDenegado() {
+        return "error/acceso-denegado";
     }
 }

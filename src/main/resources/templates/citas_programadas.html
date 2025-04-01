@@ -1,50 +1,253 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="layout/plantilla :: head"></head>
-    <body>
-        <header th:replace="layout/plantilla :: header"></header>
-        <div style="margin-top: 100px;" class="container">
-            <h1 style="text-align: center; font-weight: bold;">Mis Citas Programadas</h1>
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-            <!-- Mensaje de éxito -->
-            <div th:if="${success}" class="alert alert-success text-center">
-                <span th:text="${success}"></span>
-            </div>
+<head th:replace="layout/plantilla :: head">
+    <style>
+        .citas-container {
+            margin-top: 80px;
+            margin-bottom: 50px;
+        }
+        
+        .page-header {
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-weight: 600;
+            color: #2f4073;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 70px;
+            height: 3px;
+            background-color: #bf8d7a;
+        }
+        
+        .cita-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            margin-bottom: 20px;
+        }
+        
+        .cita-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .cita-header {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        
+        .cita-id {
+            font-weight: 600;
+            color: #2f4073;
+        }
+        
+        .cita-fecha {
+            font-weight: 500;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: #2f4073;
+        }
+        
+        .cita-body {
+            padding: 20px;
+        }
+        
+        .cita-mascota {
+            font-weight: 500;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .cita-icon {
+            width: 24px;
+            margin-right: 10px;
+            color: #bf8d7a;
+        }
+        
+        .cita-detail {
+            margin-bottom: 10px;
+        }
+        
+        .cita-label {
+            font-weight: 500;
+            color: #6c757d;
+            width: 100px;
+            display: inline-block;
+        }
+        
+        .cita-value {
+            color: #343a40;
+        }
+        
+        .cita-footer {
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #f1f1f1;
+        }
+        
+        .btn-cita {
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-weight: 500;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px 0;
+        }
+        
+        .empty-icon {
+            font-size: 5rem;
+            color: #e9ecef;
+            margin-bottom: 20px;
+        }
+        
+        .empty-text {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+        
+        .status-badge {
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-upcoming {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status-completed {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .status-cancelled {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+    </style>
+</head>
 
-            <div class="text-end mb-3">
-                <a th:href="@{/citas/nueva}" class="btn btn-success">Nueva Cita</a>
+<body>
+    <header th:replace="layout/plantilla :: header"></header>
+
+    <div class="container citas-container">
+        <div class="page-header d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="page-title">Mis Citas Programadas</h2>
+                <p class="text-muted">Gestione sus citas veterinarias programadas</p>
             </div>
-            <table class="table table-striped mt-4">
-                <thead>
-                    <tr>
-                        <th>Id Cita</th> 
-                        <th>Fecha y Hora</th>
-                        <th>Motivo</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Mostrar mensaje si la lista está vacía -->
-                    <tr th:if="${#lists.isEmpty(citas)}">
-                        <td colspan="4" class="text-center">No tienes citas programadas.</td>
-                    </tr>
-                    <tr th:each="cita : ${citas}">
-                        <td th:text="${cita.idCita}"></td>
-                        <td th:text="${#dates.format(cita.fechaCita, 'dd/MM/yyyy HH:mm')}"></td> 
-                        <td th:text="${cita.notas}"></td> 
-                        <td>
-                            <a th:href="@{/citas/editar/{id}(id=${cita.idCita})}" class="btn btn-primary btn-sm">Editar</a>
-                            <a th:href="@{/citas/eliminar/{id}(id=${cita.idCita})}" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar esta cita?');">Eliminar</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div>
+                <a th:href="@{/citas/solicitud}" class="btn btn-primary">
+                    <i class="fas fa-calendar-plus me-2"></i> Nueva Cita
+                </a>
+            </div>
         </div>
-        <footer style="background-color: #2f4073; color: white; padding: 30px 0; width: 100%; position: relative;">
-            <div class="container">
-                <p style="font-weight: bold; text-align: left; margin-left: 20px;">©VetCare+ Company, 2025</p>
+        
+        <!-- Mensaje de éxito -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+        <!-- Mensaje de error -->
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+        <!-- Estado vacío -->
+        <div th:if="${#lists.isEmpty(citas)}" class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-calendar-times"></i>
             </div>
-        </footer>
-    </body>
+            <h3 class="empty-text">No tienes citas programadas</h3>
+            <a th:href="@{/citas/solicitud}" class="btn btn-primary btn-lg">
+                <i class="fas fa-calendar-plus me-2"></i> Programar Mi Primera Cita
+            </a>
+        </div>
+        
+        <!-- Lista de citas (en tarjetas) -->
+        <div th:unless="${#lists.isEmpty(citas)}" class="row">
+            <div th:each="cita : ${citas}" class="col-lg-6">
+                <div class="cita-card">
+                    <div class="cita-header d-flex justify-content-between align-items-center">
+                        <span class="cita-id">Cita #<span th:text="${cita.idCita}">1</span></span>
+                        
+                        <!-- Indicador de estado (próxima, completada, etc.) -->
+                        <span class="status-badge status-upcoming">Próxima</span>
+                    </div>
+                    
+                    <div class="cita-body">
+                        <div class="cita-fecha">
+                            <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                            <span th:text="${#dates.format(cita.fechaCita, 'EEEE, dd MMMM yyyy')}">Lunes, 12 Marzo 2025</span>
+                        </div>
+                        
+                        <div class="cita-fecha mb-3">
+                            <i class="fas fa-clock me-2 text-primary"></i>
+                            <span th:text="${#dates.format(cita.fechaCita, 'HH:mm')}">15:30</span>
+                        </div>
+                        
+                        <div class="cita-mascota">
+                            <span class="cita-icon"><i class="fas fa-paw"></i></span>
+                            <span th:text="${cita.nombre != null ? cita.nombre : 'Mascota no especificada'}">Firulais</span>
+                        </div>
+                        
+                        <div class="cita-detail">
+                            <span class="cita-label">Servicio:</span>
+                            <span class="cita-value" th:text="${cita.servicio != null ? cita.servicio : 'No especificado'}">Consulta general</span>
+                        </div>
+                        
+                        <div class="cita-detail">
+                            <span class="cita-label">Teléfono:</span>
+                            <span class="cita-value" th:text="${cita.telefono != null ? cita.telefono : 'No especificado'}">123-456-7890</span>
+                        </div>
+                        
+                        <div th:if="${cita.notas != null && !cita.notas.isEmpty()}" class="mt-3">
+                            <div class="cita-label">Notas:</div>
+                            <p class="cita-value" th:text="${cita.notas}">Detalles de la cita...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="cita-footer d-flex justify-content-between">
+                        <a th:href="@{/citas/editar/{id}(id=${cita.idCita})}" class="btn btn-secondary btn-cita">
+                            <i class="fas fa-edit me-2"></i> Editar
+                        </a>
+                        <a th:href="@{/citas/eliminar/{id}(id=${cita.idCita})}" 
+                           class="btn btn-danger btn-cita"
+                           onclick="return confirm('¿Está seguro de que desea cancelar esta cita?');">
+                            <i class="fas fa-times-circle me-2"></i> Cancelar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="layout/plantilla :: footer"></footer>
+</body>
 </html>

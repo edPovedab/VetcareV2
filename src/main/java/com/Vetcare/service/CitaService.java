@@ -10,7 +10,7 @@ public interface CitaService {
     List<Cita> getCitas(boolean activas);
     Cita getCita(Cita cita);
     List<Cita> obtenerTodasLasCitas();
-    void guardarCita(Cita cita); // Nuevo método
+    void guardarCita(Cita cita);
+    List<Cita> getCitasPorMascota(Integer idMascota);
+    List<Cita> getCitasPorPropietario(Integer idPropietario);
 }
-
-    
