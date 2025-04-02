@@ -1,5 +1,6 @@
 package com.Vetcare.Controller;
 
+
 import com.Vetcare.domain.Usuario;
 import com.Vetcare.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +18,14 @@ public class LoginController {
 
     @Autowired
     private UsuarioService usuarioService;
-    
+
     @Autowired
     private AuthenticationManager authenticationManager;
-
+  
     @GetMapping("/login")
     public String mostrarLogin() {
         return "login";
-    }
+}
 
     @GetMapping("/registro")
     public String mostrarRegistro(Model model) {

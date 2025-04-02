@@ -164,22 +164,16 @@
                 </a>
             </div>
         </div>
-        
-        <!-- Mensaje de éxito -->
         <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="fas fa-check-circle me-2"></i>
             <span th:text="${success}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        
-        <!-- Mensaje de error -->
         <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
             <i class="fas fa-exclamation-circle me-2"></i>
             <span th:text="${error}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        
-        <!-- Estado vacío -->
         <div th:if="${#lists.isEmpty(citas)}" class="empty-state">
             <div class="empty-icon">
                 <i class="fas fa-calendar-times"></i>
@@ -189,15 +183,11 @@
                 <i class="fas fa-calendar-plus me-2"></i> Programar Mi Primera Cita
             </a>
         </div>
-        
-        <!-- Lista de citas (en tarjetas) -->
         <div th:unless="${#lists.isEmpty(citas)}" class="row">
             <div th:each="cita : ${citas}" class="col-lg-6">
                 <div class="cita-card">
                     <div class="cita-header d-flex justify-content-between align-items-center">
                         <span class="cita-id">Cita #<span th:text="${cita.idCita}">1</span></span>
-                        
-                        <!-- Indicador de estado (próxima, completada, etc.) -->
                         <span class="status-badge status-upcoming">Próxima</span>
                     </div>
                     

@@ -18,7 +18,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             path.startsWith("/css") || path.startsWith("/js") || 
             path.startsWith("/img") || path.equals("/")) {
             return true;
-        }
+}
         
         // Verificar acceso a rutas de administrador
         if (path.startsWith("/admin")) {
