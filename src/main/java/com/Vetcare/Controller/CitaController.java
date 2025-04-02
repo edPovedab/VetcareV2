@@ -2,12 +2,16 @@ package com.Vetcare.Controller;
 
 import com.Vetcare.domain.Cita;
 import com.Vetcare.domain.Mascota;
+import com.Vetcare.domain.Usuario;
 import com.Vetcare.service.CitaService;
 import com.Vetcare.service.MascotaService;
+import com.Vetcare.service.UsuarioService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,24 +25,40 @@ public class CitaController {
     private final MascotaService mascotaService;
 
     @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
     public CitaController(CitaService citaService, MascotaService mascotaService) {
         this.citaService = citaService;
         this.mascotaService = mascotaService;
     }
 
     @GetMapping("/listar")
-    public String mostrarFormularioCitas(Model model) {
+    public String mostrarFormularioCitas(Model model, Authentication authentication) {
+        String correo = authentication.getName();
+        Usuario usuario = usuarioService.findByCorreo(correo);
+
         var citas = citaService.getCitas(true);
         model.addAttribute("citas", citas);
+        model.addAttribute("usuario", usuario);
         return "citas_programadas";
     }
 
     @GetMapping("/solicitud")
-    public String mostrarFormularioSolicitud(Model model) {
-        var mascotas = mascotaService.listarMascotas();
-        //var usuarios = usuarioService.listarUsuarios(); // Necesitarás crear este servicio
-        model.addAttribute("mascotas", mascotas);
-        //model.addAttribute("usuarios", usuarios);
+    public String mostrarFormularioSolicitud(Model model, Authentication authentication) {
+        // Obtener el usuario autenticado actual
+        String correo = authentication.getName();
+        Usuario usuario = usuarioService.findByCorreo(correo);
+
+        if (usuario != null) {
+            // Obtener mascotas del usuario
+            List<Mascota> mascotas = mascotaService.buscarPorPropietario(usuario.getIdUsuario());
+            model.addAttribute("mascotas", mascotas);
+            model.addAttribute("usuario", usuario); // Añadir el usuario al modelo
+        } else {
+            model.addAttribute("error", "No se pudo obtener la información del usuario");
+        }
+
         return "solicitud de citas";
     }
 
@@ -50,6 +70,7 @@ public class CitaController {
             @RequestParam(required = false) String sexo,
             @RequestParam String telefono,
             @RequestParam String motivo,
+            @RequestParam(required = false) String notas,
             @RequestParam(required = false) Integer idPropietario, // Añade este parámetro
             RedirectAttributes redirectAttributes) {
 
@@ -66,7 +87,8 @@ public class CitaController {
             }
 
             nuevaCita.setTelefono(telefono);
-            nuevaCita.setNotas(motivo);
+            nuevaCita.setNotas(notas);
+            nuevaCita.setMotivo(motivo);
 
             if (idMascota != null && idMascota > 0) {
                 // Usar mascota existente

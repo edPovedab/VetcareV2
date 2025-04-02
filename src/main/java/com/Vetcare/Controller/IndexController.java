@@ -35,7 +35,7 @@ public class IndexController {
             return "redirect:/citas/solicitud";
         } else {
             // Si no está autenticado, redirigir al login
-            return "redirect:/login";
+            return "redirect:/solicitud de citas";
         }
     }
 

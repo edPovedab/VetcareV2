@@ -3,301 +3,309 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head th:replace="layout/plantilla :: head">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <style>
-        .cita-container {
-            margin-top: 80px;
-            margin-bottom: 50px;
-        }
-        
-        .cita-form-container {
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        
-        .cita-image {
-            background-color: #f8f9fa;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-        }
-        
-        .cita-image img {
-            max-width: 100%;
-            max-height: 550px;
-            object-fit: contain;
-        }
-        
-        .cita-header {
-            background-color: #2f4073;
-            color: white;
-            padding: 25px;
-            text-align: center;
-            border-radius: 15px 15px 0 0;
-        }
-        
-        .cita-header h1 {
-            font-weight: 700;
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-        
-        .cita-header p {
-            margin-bottom: 0;
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        
-        .cita-label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #2f4073;
-        }
-        
-        .cita-input {
-            border-radius: 8px;
-            padding: 12px 15px;
-            border: 1px solid #e1e5eb;
-            width: 100%;
-            transition: all 0.3s;
-        }
-        
-        .cita-input:focus {
-            border-color: #bf8d7a;
-            box-shadow: 0 0 0 0.25rem rgba(191, 141, 122, 0.25);
-        }
-        
-        .cita-radio-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 5px;
-        }
-        
-        .cita-radio-btn {
-            flex: 1;
-            min-width: 120px;
-        }
-        
-        .cita-radio-btn input[type="radio"] {
-            display: none;
-        }
-        
-        .cita-radio-btn label {
-            display: block;
-            background-color: #f8f9fa;
-            border: 1px solid #e1e5eb;
-            border-radius: 8px;
-            padding: 12px 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .cita-radio-btn input[type="radio"]:checked + label {
-            background-color: #2f4073;
-            color: white;
-            border-color: #2f4073;
-        }
-        
-        .cita-btn {
-            background-color: #bf8d7a;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 25px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .cita-btn:hover {
-            background-color: #a77c6a;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(191, 141, 122, 0.4);
-        }
-        
-        /* Estilos para el selector de fecha */
-        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.endRange.nextMonthDay {
-            background: #2f4073;
-            border-color: #2f4073;
-        }
-    </style>
-</head>
-
-<body>
-    <header th:replace="layout/plantilla :: header"></header>
-
-    <div class="container py-5 cita-container">
-        <div class="row">
-            <div class="col-lg-5 mb-4 mb-lg-0">
-                <div class="cita-image h-100">
-                    <img th:src="@{/images/perrovet.png}" alt="Imagen" class="img-fluid">
-                </div>
-            </div>
-            
-            <div class="col-lg-7">
-                <div class="cita-form-container">
-                    <div class="cita-header">
-                        <h1>Solicitud de Citas</h1>
-                        <p>Programa una visita para tu mascota con nuestros especialistas</p>
-                    </div>
-                    
-                    <!-- Mensaje de error -->
-                    <div th:if="${error}" class="alert alert-danger m-3 text-center">
-                        <i class="fas fa-exclamation-circle me-2"></i>
-                        <span th:text="${error}"></span>
-                    </div>
-                    
-                    <!-- Mensaje de éxito -->
-                    <div th:if="${success}" class="alert alert-success m-3 text-center">
-                        <i class="fas fa-check-circle me-2"></i>
-                        <span th:text="${success}"></span>
-                    </div>
-                    
-                    <div class="card-body p-4">
-                        <form th:action="@{/citas/solicitar}" method="post" id="formCita">
-                            <div class="mb-4">
-                                <label for="mascotaSelect" class="cita-label">Seleccione una mascota</label>
-                                <select id="mascotaSelect" name="idMascota" class="form-select cita-input">
-                                    <option value="0">-- Registrar nueva mascota --</option>
-                                    <option th:each="mascota : ${mascotas}"
-                                            th:value="${mascota.idMascota}"
-                                            th:text="${mascota.nombreMascota + ' (' + mascota.especie + ')'}">
-                                        Firulais (Perro)
-                                    </option>
-                                </select>
-                            </div>
-                            
-                            <!-- Campos para nueva mascota -->
-                            <div id="nuevaMascotaInfo" style="display: none;">
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <label for="tipoAnimal" class="cita-label">Tipo de Animal</label>
-                                        <input type="text" id="tipoAnimal" name="tipoAnimal" class="form-control cita-input" placeholder="Ej: Perro, Gato, Conejo...">
-                                    </div>
-                                    
-                                    <div class="col-md-6">
-                                        <label for="nombre" class="cita-label">Nombre de la Mascota</label>
-                                        <input type="text" id="nombre" name="nombre" class="form-control cita-input" placeholder="Nombre de tu mascota">
-                                    </div>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label class="cita-label">Sexo de la Mascota</label>
-                                    <div class="cita-radio-group">
-                                        <div class="cita-radio-btn">
-                                            <input type="radio" id="sexoMacho" name="sexo" value="Macho">
-                                            <label for="sexoMacho">Macho</label>
-                                        </div>
-                                        
-                                        <div class="cita-radio-btn">
-                                            <input type="radio" id="sexoHembra" name="sexo" value="Hembra">
-                                            <label for="sexoHembra">Hembra</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <label for="fechaHora" class="cita-label">Fecha y Hora Preferida</label>
-                                    <input type="text" id="fechaHora" name="fechaHora" class="form-control cita-input" required placeholder="Seleccione fecha y hora">
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label for="telefono" class="cita-label">Teléfono de Contacto</label>
-                                    <input type="tel" id="telefono" name="telefono" class="form-control cita-input" placeholder="Ej: 123-456-7890" required>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label for="motivo" class="cita-label">Motivo de la Consulta</label>
-                                <select id="motivo" name="motivo" class="form-select cita-input" required>
-                                    <option value="">Seleccione un motivo</option>
-                                    <option value="Consulta general">Consulta general</option>
-                                    <option value="Vacunación">Vacunación</option>
-                                    <option value="Control de parásitos">Control de parásitos</option>
-                                    <option value="Problema de salud">Problema de salud</option>
-                                    <option value="Cirugía">Cirugía</option>
-                                    <option value="Seguimiento">Seguimiento</option>
-                                    <option value="Otro">Otro (especificar en notas)</option>
-                                </select>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label for="notas" class="cita-label">Notas Adicionales</label>
-                                <textarea id="notas" name="notas" class="form-control cita-input" rows="3" placeholder="Describe brevemente el motivo de tu visita o cualquier información adicional"></textarea>
-                            </div>
-                            
-                            <div class="text-center mt-4">
-                                <button type="submit" class="btn cita-btn" style="width: 250px;">
-                                    <i class="fas fa-calendar-check me-2"></i> Reservar Cita
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <footer th:replace="layout/plantilla :: footer"></footer>
-    
-    <!-- Flatpickr para el selector de fecha y hora -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Inicializar el selector de fecha y hora
-            flatpickr("#fechaHora", {
-                enableTime: true,
-                dateFormat: "Y-m-d H:i",
-                minDate: "today",
-                locale: "es",
-                time_24hr: true,
-                minTime: "08:00",
-                maxTime: "18:00",
-                minuteIncrement: 30,
-                disable: [
-                    function(date) {
-                        // Deshabilitar domingos (0) y sábados por la tarde
-                        return (date.getDay() === 0 || 
-                               (date.getDay() === 6 && date.getHours() >= 13));
+    <head th:replace="layout/plantilla :: head">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
+                <style>
+                    .cita-container {
+                        margin-top: 80px;
+                        margin-bottom: 50px;
                     }
-                ]
-            });
-            
-            // Mostrar/ocultar campos de nueva mascota
-            function toggleNuevaMascotaFields() {
-                const selectElement = document.getElementById('mascotaSelect');
-                const nuevaMascotaDiv = document.getElementById('nuevaMascotaInfo');
-                const tipoAnimalInput = document.getElementById('tipoAnimal');
-                const nombreInput = document.getElementById('nombre');
-                const sexoInputs = document.querySelectorAll('input[name="sexo"]');
-                
-                if (selectElement.value === "0") {
-                    nuevaMascotaDiv.style.display = 'block';
-                    tipoAnimalInput.required = true;
-                    nombreInput.required = true;
-                    sexoInputs[0].required = true;
-                } else {
-                    nuevaMascotaDiv.style.display = 'none';
-                    tipoAnimalInput.required = false;
-                    nombreInput.required = false;
-                    sexoInputs[0].required = false;
-                }
-            }
-            
-            document.getElementById('mascotaSelect').addEventListener('change', toggleNuevaMascotaFields);
-            toggleNuevaMascotaFields();
-        });
-    </script>
-</body>
-</html>
+
+                    .cita-form-container {
+                        background-color: white;
+                        border-radius: 15px;
+                        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                        overflow: hidden;
+                    }
+
+                    .cita-image {
+                        background-color: #f8f9fa;
+                        padding: 20px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 100%;
+                    }
+
+                    .cita-image img {
+                        max-width: 100%;
+                        max-height: 550px;
+                        object-fit: contain;
+                    }
+
+                    .cita-header {
+                        background-color: #2f4073;
+                        color: white;
+                        padding: 25px;
+                        text-align: center;
+                        border-radius: 15px 15px 0 0;
+                    }
+
+                    .cita-header h1 {
+                        font-weight: 700;
+                        font-size: 1.8rem;
+                        margin-bottom: 10px;
+                    }
+
+                    .cita-header p {
+                        margin-bottom: 0;
+                        font-size: 1rem;
+                        opacity: 0.9;
+                    }
+
+                    .cita-label {
+                        font-weight: 600;
+                        margin-bottom: 8px;
+                        color: #2f4073;
+                    }
+
+                    .cita-input {
+                        border-radius: 8px;
+                        padding: 12px 15px;
+                        border: 1px solid #e1e5eb;
+                        width: 100%;
+                        transition: all 0.3s;
+                    }
+
+                    .cita-input:focus {
+                        border-color: #bf8d7a;
+                        box-shadow: 0 0 0 0.25rem rgba(191, 141, 122, 0.25);
+                    }
+
+                    .cita-radio-group {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 10px;
+                        margin-top: 5px;
+                    }
+
+                    .cita-radio-btn {
+                        flex: 1;
+                        min-width: 120px;
+                    }
+
+                    .cita-radio-btn input[type="radio"] {
+                        display: none;
+                    }
+
+                    .cita-radio-btn label {
+                        display: block;
+                        background-color: #f8f9fa;
+                        border: 1px solid #e1e5eb;
+                        border-radius: 8px;
+                        padding: 12px 15px;
+                        text-align: center;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                    }
+
+                    .cita-radio-btn input[type="radio"]:checked + label {
+                        background-color: #2f4073;
+                        color: white;
+                        border-color: #2f4073;
+                    }
+
+                    .cita-btn {
+                        background-color: #bf8d7a;
+                        color: white;
+                        border: none;
+                        border-radius: 8px;
+                        padding: 12px 25px;
+                        font-weight: 600;
+                        transition: all 0.3s;
+                    }
+
+                    .cita-btn:hover {
+                        background-color: #a77c6a;
+                        transform: translateY(-2px);
+                        box-shadow: 0 5px 15px rgba(191, 141, 122, 0.4);
+                    }
+
+                    /* Estilos para el selector de fecha */
+                    .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.endRange.nextMonthDay {
+                        background: #2f4073;
+                        border-color: #2f4073;
+                    }
+                </style>
+                </head>
+
+                <body>
+                    <header th:replace="layout/plantilla :: header"></header>
+
+                    <div class="container py-5 cita-container">
+                        <div class="row">
+                            <div class="col-lg-5 mb-4 mb-lg-0">
+                                <div class="cita-image h-100">
+                                    <img th:src="@{/images/perrovet.png}" alt="Imagen" class="img-fluid">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-7">
+                                <div class="cita-form-container">
+                                    <div class="cita-header">
+                                        <h1>Solicitud de Citas</h1>
+                                        <p>Programa una visita para tu mascota con nuestros especialistas</p>
+                                    </div>
+
+                                    <!-- Mensaje de error -->
+                                    <div th:if="${error}" class="alert alert-danger m-3 text-center">
+                                        <i class="fas fa-exclamation-circle me-2"></i>
+                                        <span th:text="${error}"></span>
+                                    </div>
+
+                                    <!-- Mensaje de éxito -->
+                                    <div th:if="${success}" class="alert alert-success m-3 text-center">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        <span th:text="${success}"></span>
+                                    </div>
+
+                                    <div class="card-body p-4">
+                                        <form th:action="@{/citas/solicitar}" method="post" id="formCita">
+                                            <!-- Campo oculto para el ID del propietario -->
+                                            <input type="hidden" name="idPropietario" th:value="${usuario != null ? usuario.idUsuario : ''}">
+
+                                                <div class="mb-4">
+                                                    <label for="mascotaSelect" class="cita-label">Seleccione una mascota</label>
+                                                    <select id="mascotaSelect" name="idMascota" class="form-select cita-input">
+                                                        <option value="0">-- Registrar nueva mascota --</option>
+                                                        <option th:each="mascota : ${mascotas}"
+                                                                th:value="${mascota.idMascota}"
+                                                                th:text="${mascota.nombreMascota + ' (' + mascota.especie + ')'}">
+                                                            Firulais (Perro)
+                                                        </option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Campos para nueva mascota -->
+                                                <div id="nuevaMascotaInfo" style="display: none;">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <label for="tipoAnimal" class="cita-label">Tipo de Animal</label>
+                                                            <input type="text" id="tipoAnimal" name="tipoAnimal" class="form-control cita-input" placeholder="Ej: Perro, Gato, Conejo...">
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <label for="nombre" class="cita-label">Nombre de la Mascota</label>
+                                                            <input type="text" id="nombre" name="nombre" class="form-control cita-input" placeholder="Nombre de tu mascota">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="cita-label">Sexo de la Mascota</label>
+                                                        <div class="cita-radio-group">
+                                                            <div class="cita-radio-btn">
+                                                                <input type="radio" id="sexoMacho" name="sexo" value="Macho">
+                                                                    <label for="sexoMacho">Macho</label>
+                                                            </div>
+
+                                                            <div class="cita-radio-btn">
+                                                                <input type="radio" id="sexoHembra" name="sexo" value="Hembra">
+                                                                    <label for="sexoHembra">Hembra</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-4">
+                                                    <div class="col-md-6">
+                                                        <label for="fechaHora" class="cita-label">Fecha y Hora Preferida</label>
+                                                        <input type="text" id="fechaHora" name="fechaHora" class="form-control cita-input" required placeholder="Seleccione fecha y hora">
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label for="telefono" class="cita-label">Teléfono de Contacto</label>
+                                                        <input type="tel" id="telefono" name="telefono" class="form-control cita-input" placeholder="Ej: 123-456-7890" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-4">
+                                                    <label for="motivo" class="cita-label">Motivo de la Consulta</label>
+                                                    <select id="motivo" name="motivo" class="form-select cita-input" required>
+                                                        <option value="">Seleccione un motivo</option>
+                                                        <option value="Consulta general">Consulta general</option>
+                                                        <option value="Vacunación">Vacunación</option>
+                                                        <option value="Control de parásitos">Control de parásitos</option>
+                                                        <option value="Problema de salud">Problema de salud</option>
+                                                        <option value="Cirugía">Cirugía</option>
+                                                        <option value="Seguimiento">Seguimiento</option>
+                                                        <option value="Otro">Otro (especificar en notas)</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-4">
+                                                    <label for="notas" class="cita-label">Notas Adicionales</label>
+                                                    <textarea id="notas" name="notas" class="form-control cita-input" rows="3" placeholder="Describe brevemente el motivo de tu visita o cualquier información adicional"></textarea>
+                                                </div>
+
+                                                <div class="text-center mt-4">
+                                                    <button type="submit" class="btn cita-btn" style="width: 250px;">
+                                                        <i class="fas fa-calendar-check me-2"></i> Reservar Cita
+                                                    </button>
+                                                </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <footer th:replace="layout/plantilla :: footer"></footer>
+
+                    <!-- Flatpickr para el selector de fecha y hora - NUEVA IMPLEMENTACIÓN -->
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/l10n/es.min.js"></script>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            // Inicializar el selector de fecha y hora
+                            try {
+                                flatpickr("#fechaHora", {
+                                    enableTime: true,
+                                    dateFormat: "Y-m-d H:i",
+                                    minDate: "today",
+                                    locale: "es",
+                                    time_24hr: true,
+                                    minTime: "08:00",
+                                    maxTime: "18:00",
+                                    minuteIncrement: 30,
+                                    disable: [
+                                        function (date) {
+                                            // Deshabilitar domingos (0) y sábados por la tarde ya que sabados solo se trabaja hasta medio dia
+                                            return (date.getDay() === 0 ||
+                                                    (date.getDay() === 6 && date.getHours() >= 13));
+                                        }
+                                    ]
+                                });
+                                console.log("Flatpickr inicializado correctamente");
+                            } catch (error) {
+                                console.error("Error al inicializar flatpickr:", error);
+                            }
+
+                            // Mostrar/ocultar campos de nueva mascota
+                            function toggleNuevaMascotaFields() {
+                                const selectElement = document.getElementById('mascotaSelect');
+                                const nuevaMascotaDiv = document.getElementById('nuevaMascotaInfo');
+                                const tipoAnimalInput = document.getElementById('tipoAnimal');
+                                const nombreInput = document.getElementById('nombre');
+                                const sexoInputs = document.querySelectorAll('input[name="sexo"]');
+
+                                if (selectElement.value === "0") {
+                                    nuevaMascotaDiv.style.display = 'block';
+                                    tipoAnimalInput.required = true;
+                                    nombreInput.required = true;
+                                    sexoInputs[0].required = true;
+                                } else {
+                                    nuevaMascotaDiv.style.display = 'none';
+                                    tipoAnimalInput.required = false;
+                                    nombreInput.required = false;
+                                    sexoInputs[0].required = false;
+                                }
+                            }
+
+                            document.getElementById('mascotaSelect').addEventListener('change', toggleNuevaMascotaFields);
+                            toggleNuevaMascotaFields();
+                        });
+                    </script>
+                </body>
+                </html>

@@ -57,7 +57,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             
             usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         } else {
-            // Si estamos actualizando un usuario pero no la contraseña
+            //metodo cuando se esta actualizando un usuario pero no la contraseña
             Usuario existente = usuarioDao.findById(usuario.getIdUsuario()).orElse(null);
             if (existente != null) {
                 usuario.setPassword(existente.getPassword());
