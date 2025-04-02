@@ -45,7 +45,7 @@ public class AdminController {
         model.addAttribute("ultimasCitas", citaService.getCitas(true));
         model.addAttribute("ultimosProductos", productoService.listarProductos());
         
-        return "admin/dashboard";
+        return "dashboard";
     }
     
     @GetMapping("/usuarios")

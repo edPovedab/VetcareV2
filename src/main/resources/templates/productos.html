@@ -173,8 +173,7 @@
                                 </a>
                                 
                                 <!-- Botón visible solo para administradores -->
-                                <a sec:authorize="hasAuthority('ADMIN')" 
-                                   th:href="@{/productos/editar/{id}(id=${producto.idProducto})}" 
+                                <a th:href="@{/productos/editar/{id}(id=${producto.idProducto})}" 
                                    class="btn btn-outline-secondary btn-sm mt-2">
                                     <i class="fas fa-edit me-1"></i> Editar
                                 </a>
